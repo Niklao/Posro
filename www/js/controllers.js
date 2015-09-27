@@ -41,15 +41,41 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('PlaylistsCtrl', function($scope) {
-  $scope.playlists = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 }
+.controller('PlaylistsCtrl', function($scope,$ionicModal) {
+  $scope.products = [
+    { title:'logo',price:'100',src: 'img/logo.png', id: 1 },
+    { title:'ionic',price:'200',src: 'img/ionic.png', id: 2 }
   ];
+  $scope.addItem = function(id){
+  	$scope.modal.hide();
+  }
+  $ionicModal.fromTemplateUrl('templates/addItem.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
+
+  // Triggered in the login modal to close it
+  $scope.closeLogin = function() {
+    $scope.modal.hide();
+  };
+
+  // Open the login modal
+  $scope.addItem = function(id) {
+  		$scope.productSubs = [
+    		{ title:'logo',price:'100',src: 'img/logo.png', id: 1 },
+    		{ title:'logo',price:'100',src: 'img/logo.png', id: 1 },
+    		{ title:'logo',price:'100',src: 'img/logo.png', id: 1 },
+    		{ title:'logo',price:'100',src: 'img/logo.png', id: 1 },
+    		{ title:'logo',price:'100',src: 'img/logo.png', id: 1 },
+    		{ title:'logo',price:'100',src: 'img/logo.png', id: 1 },
+    		{ title:'logo',price:'100',src: 'img/logo.png', id: 1 }
+  		];
+  		
+		$scope.name=id;
+		$scope.description="Loren ipsum Loren ipsumLoren ipsumLoren ipsumLoren ipsumLoren ipsumLoren ipsumLoren ipsum";    
+    $scope.modal.show();
+  };
 })
 
 .controller('PlaylistCtrl', function($scope, $stateParams) {

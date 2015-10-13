@@ -25,6 +25,16 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
 
+    .state('home', {
+    url: '/home',
+    templateUrl: 'templates/home.html'
+  })
+
+    .state('login', {
+    url: '/login',
+    templateUrl: 'templates/home.html'
+  })
+
     .state('app', {
     url: '/app',
     abstract: true,
@@ -69,5 +79,5 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     }
   });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/playlists');
+  $urlRouterProvider.otherwise('/home');
 });

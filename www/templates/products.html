@@ -1,4 +1,4 @@
-<ion-view view-title="Playlists">
+<ion-view view-title="{{storeName}}">
 	<ion-content>
 		<ion-list>
 			<ion-item ng-repeat="product in products" class="item-thumbnail-left item-button-right" ng-click="addItem({{product.id}})">
@@ -15,6 +15,5 @@
 		</ion-list>
 	</ion-content>
 	<div class="bar bar-footer bar-balanced">
-  		<button class="button pull-right icon ion-bag"></button>
 	</div>
 </ion-view>

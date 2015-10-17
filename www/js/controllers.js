@@ -41,7 +41,7 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('PlaylistsCtrl', function($scope,$ionicModal) {
+.controller('ProductsCtrl', function($scope,$ionicModal) {
   $scope.products = [
     { title:'logo',price:'100',src: 'img/logo.png', id: 1 },
     { title:'ionic',price:'200',src: 'img/ionic.png', id: 2 }
@@ -55,12 +55,23 @@ angular.module('starter.controllers', [])
     $scope.modal = modal;
   });
 
+  $ionicModal.fromTemplateUrl('templates/checkout.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $scope.modal2 = modal;
+  });
+
   // Triggered in the login modal to close it
   $scope.closeLogin = function() {
     $scope.modal.hide();
   };
 
-  // Open the login modal
+  $scope.checkoutStore = function(id) {
+    //alert
+    $scope.modal2.show();
+  };
+
+  // Open product choosing Modal
   $scope.addItem = function(id) {
   		$scope.productSubs = [
     		{ title:'logo',price:'100',src: 'img/logo.png', id: 1 },
@@ -76,7 +87,66 @@ angular.module('starter.controllers', [])
 		$scope.description="Loren ipsum Loren ipsumLoren ipsumLoren ipsumLoren ipsumLoren ipsumLoren ipsumLoren ipsum";    
     $scope.modal.show();
   };
+  $scope.storeName="Pasro";
 })
 
-.controller('PlaylistCtrl', function($scope, $stateParams) {
+.controller('LocationCtrl', function($scope,$ionicModal) {
+  $scope.products = [
+    { title:'logo',price:'100',src: 'img/logo.png', id: 1 },
+    { title:'ionic',price:'200',src: 'img/ionic.png', id: 2 }
+  ];
+  $scope.addItem = function(id){
+    $scope.modal.hide();
+  }
+  $ionicModal.fromTemplateUrl('templates/addItem.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
+
+  // Triggered in the login modal to close it
+  $scope.closeLogin = function() {
+    $scope.modal.hide();
+  };
+
+  // Open the login modal
+  $scope.addItem = function(id) {
+      $scope.productSubs = [
+        { title:'logo',price:'100',src: 'img/logo.png', id: 1 },
+        { title:'logo',price:'100',src: 'img/logo.png', id: 1 },
+        { title:'logo',price:'100',src: 'img/logo.png', id: 1 },
+        { title:'logo',price:'100',src: 'img/logo.png', id: 1 },
+        { title:'logo',price:'100',src: 'img/logo.png', id: 1 },
+        { title:'logo',price:'100',src: 'img/logo.png', id: 1 },
+        { title:'logo',price:'100',src: 'img/logo.png', id: 1 }
+      ];
+      
+    $scope.name=id;
+    $scope.description="Loren ipsum Loren ipsumLoren ipsumLoren ipsumLoren ipsumLoren ipsumLoren ipsumLoren ipsum";    
+    $scope.modal.show();
+  };
+  $scope.storeName="Pasro";
+})
+
+.controller('HomeCtrl', function($scope,$ionicModal) {  
+  $ionicModal.fromTemplateUrl('templates/login.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
+
+  $scope.closeLogin = function() {
+    $scope.modal.hide();
+  };
+
+  $scope.login = function() {
+    $scope.modal.show();
+  };
+
+  $scope.location = function() {
+    alert("hai");
+    // $state.go('location');
+  };
+
+
 });

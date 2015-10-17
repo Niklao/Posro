@@ -4,8 +4,12 @@
       <ion-nav-back-button>
       </ion-nav-back-button>
       <ion-nav-buttons side="left">
-        <button class="button button-icon button-clear ion-navicon" menu-toggle="left">
-        </button>
+      <button class="button button-icon button-clear ion-navicon" menu-toggle="left">
+      </button>
+      </ion-nav-buttons>
+      <ion-nav-buttons side="right">
+      <button class="button pull-right icon ion-bag" ng-click="checkoutStore()">
+      </button>
       </ion-nav-buttons>
     </ion-nav-bar>
     <ion-nav-view name="menuContent">
@@ -17,23 +21,24 @@
     </ion-header-bar>
     <ion-content>
       <ion-list>
-			<div class="item item-divider">
-    			Featured Brands
-			</div>
+        <div class="item item-divider">
+          Featured Brands
+        </div>
         <ion-item menu-close ng-click="login()">
           Login
         </ion-item>
         <ion-item menu-close href="#/app/search">
           Search
         </ion-item>
-        	<div class="item item-divider">
-    			Candy Bars
-			</div>
+          <div class="item item-divider">
+            Candy Bars
+          </div>
         <ion-item menu-close href="#/app/browse">
           Browse
         </ion-item>
-        <ion-item menu-close href="#/app/playlists">
-          Playlists
+        <ion-item menu-close href="#/location">
+          <i class="icon ion-ios-location"></i>
+          Change Store
         </ion-item>
       </ion-list>
     </ion-content>

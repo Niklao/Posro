@@ -27,19 +27,21 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 
     .state('home', {
     url: '/home',
-    templateUrl: 'templates/home.html'
+    templateUrl: 'templates/home.html',
+    controller: 'HomeCtrl'
   })
 
-    .state('login', {
-    url: '/login',
-    templateUrl: 'templates/home.html'
+    .state('location', {
+    url: '/location',
+    templateUrl: 'templates/location.html',
+    controller: 'LocationCtrl'
   })
 
     .state('app', {
     url: '/app',
     abstract: true,
     templateUrl: 'templates/menu.html',
-    controller: 'AppCtrl'
+    controller: 'ProductsCtrl'
   })
 
   .state('app.search', {
@@ -51,33 +53,17 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     }
   })
 
-  .state('app.browse', {
-      url: '/browse',
-      views: {
-        'menuContent': {
-          templateUrl: 'templates/browse.html'
-        }
-      }
-    })
-    .state('app.playlists', {
-      url: '/playlists',
-      views: {
-        'menuContent': {
-          templateUrl: 'templates/playlists.html',
-          controller: 'PlaylistsCtrl'
-        }
-      }
-    })
-
-  .state('app.single', {
-    url: '/playlists/:playlistId',
+  .state('app.products', {
+    url: '/products',
     views: {
       'menuContent': {
-        templateUrl: 'templates/playlist.html',
-        controller: 'PlaylistCtrl'
+        templateUrl: 'templates/products.html',
+        controller: 'ProductsCtrl'
       }
     }
-  });
+  })
+
+ 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/home');
 });

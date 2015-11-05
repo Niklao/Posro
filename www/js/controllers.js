@@ -128,7 +128,7 @@ angular.module('starter.controllers', [])
   $scope.storeName="Pasro";
 })
 
-.controller('HomeCtrl', function($scope,$ionicModal) {  
+.controller('HomeCtrl', function($scope,$ionicModal,$http) {  
   $ionicModal.fromTemplateUrl('templates/login.html', {
     scope: $scope
   }).then(function(modal) {
@@ -144,9 +144,8 @@ angular.module('starter.controllers', [])
   };
 
   $scope.location = function() {
-    alert("hai");
-    // $state.go('location');
-  };
+    //alert("hai");
+    $http({method: 'POST',url: 'http://www.w3schools.com/angular/customers.php',data: $.param({ID: "key"}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(function successCallback(response) {alert("yo");}, function errorCallback(response) {});};
 
 
 });

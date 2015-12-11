@@ -41,7 +41,20 @@ angular.module('starter.controllers', ['ui.router'])
   };
 })
 
-.controller('ProductsCtrl', function($scope,$ionicModal) {
+.controller('ProductsCtrl', function($scope,$ionicModal,$http) {
+
+	$scope.jsonResponse;
+	$http({method: 'POST',url: 'http://www.myposro.somee.com/webservice1.asmx/getCategory',data: $.param({ID: '1' , StoreID: '4'}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+	function successCallback(response) {
+		var x2js = new X2JS();
+		var jsonResponse;
+		jsonResponse = x2js.xml_str2json(response.data);
+		$scope.jsonResponse = JSON.parse(jsonResponse);
+		console.log('Yes');
+		//$scope.jsonResponse = jsonResponse.
+	}
+	, function errorCallback(response) {alert(response);});
+
   $scope.products = [
     { title:'logo',price:'100',src: 'img/logo.png', id: 1 },
     { title:'ionic',price:'200',src: 'img/ionic.png', id: 2 }

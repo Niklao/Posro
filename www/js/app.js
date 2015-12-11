@@ -27,12 +27,14 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 
     .state('home', {
     url: '/home',
+	cache: false ,
     templateUrl: 'templates/home.html',
     controller: 'HomeCtrl'
   })
 
     .state('location', {
     url: '/location',
+	cache: false ,
     templateUrl: 'templates/location.html',
     controller: 'LocationCtrl'
   })

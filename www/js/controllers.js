@@ -1,6 +1,6 @@
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ['ui.router'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout ) {
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -128,13 +128,32 @@ angular.module('starter.controllers', [])
   $scope.storeName="Pasro";
 })
 
-.controller('HomeCtrl', function($scope,$ionicModal,$http) {  
+.controller('HomeCtrl', function($scope,$ionicModal,$http,$state) {
   $ionicModal.fromTemplateUrl('templates/login.html', {
     scope: $scope
   }).then(function(modal) {
     $scope.modal = modal;
   });
 
+  $scope.userLogin= function(){
+	var jsonResponse ;
+	$http({method: 'POST',url: 'http://www.myposro.somee.com/webservice1.asmx/UserLogin',data: $.param({_UserName: $('#userName').val() ,_Password: $('#passWord').val()}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+	function successCallback(response) {
+		var x2js = new X2JS();
+		jsonResponse = x2js.xml_str2json(response.data);
+		if(jsonResponse.boolean == "true")
+		{
+			$state.go('location');
+			$scope.modal.hide();
+		}
+		else
+		{
+			alert('Login Failed');
+		}
+	}
+	, function errorCallback(response) {alert(response);});
+  };
+  
   $scope.closeLogin = function() {
     $scope.modal.hide();
   };
@@ -145,7 +164,8 @@ angular.module('starter.controllers', [])
 
   $scope.location = function() {
     //alert("hai");
-    $http({method: 'POST',url: 'http://www.w3schools.com/angular/customers.php',data: $.param({ID: "key"}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(function successCallback(response) {alert("yo");}, function errorCallback(response) {});};
+	$scope.login();
+    };
 
 
 });

@@ -49,9 +49,7 @@ angular.module('starter.controllers', ['ui.router'])
 		var x2js = new X2JS();
 		var jsonResponse;
 		jsonResponse = x2js.xml_str2json(response.data);
-		$scope.jsonResponse = JSON.parse(jsonResponse);
-		console.log('Yes');
-		//$scope.jsonResponse = jsonResponse.
+		$scope.jsonResponse = JSON.parse(jsonResponse.string.__text);
 	}
 	, function errorCallback(response) {alert(response);});
 

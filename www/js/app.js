@@ -38,6 +38,20 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     templateUrl: 'templates/location.html',
     controller: 'LocationCtrl'
   })
+  
+    .state('storeTypes', {
+    url: '/storetypes',
+	cache: false ,
+    templateUrl: 'templates/storeTypes.html',
+    controller: 'StoreTypes'
+  })
+  
+  .state('stores', {
+    url: '/stores',
+	cache: false ,
+    templateUrl: 'templates/stores.html',
+    controller: 'Stores'
+  })
 
     .state('app', {
     url: '/app',

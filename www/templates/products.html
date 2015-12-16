@@ -1,12 +1,11 @@
 <ion-view view-title="{{storeName}}">
 	<ion-content>
 		<ion-list>
-			<ion-item ng-repeat="product in products" class="item-thumbnail-left item-button-right" ng-click="addItem({{product.id}})">
-				<img src="{{product.src}}">				
-				{{product.title}}
-				mama
+			<ion-item ng-repeat="product in products.Table" class="item-thumbnail-left item-button-right" ng-click="addItem({{product.ProductID}})">
+				<img src="{{product.ImagePath}}">				
+				{{product.ProductName}}
 				<span class="item-note">
-      			Rs{{product.price}}
+      			Rs{{product.StorePrice}}
     			</span>
 				<button class="button button-positive">
       			<i class="ion-ios-cart-outline"></i>

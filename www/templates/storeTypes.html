@@ -1,0 +1,10 @@
+<ion-pane>
+	<ion-header-bar>
+		<h1 class="title">Store Types</h1>
+	</ion-header-bar>
+	<ion-content>
+		<ion-item ng-repeat="storeType in storeTypes.Table" ng-click="selectStoreTypes({{storeType.StoreTypeID}})">	
+			{{storeType.StoreType}}
+		</ion-item>
+	</ion-content>
+</ion-pane>

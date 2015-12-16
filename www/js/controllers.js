@@ -41,9 +41,20 @@ angular.module('starter.controllers', ['ui.router'])
   };
 })
 
-.controller('ProductsCtrl', function($scope,$ionicModal,$http) {
+.controller('ProductsCtrl', function($scope,$ionicModal,$http,$rootScope) {
 
 	$scope.jsonResponse;
+	$scope.currentProduct;
+	
+	$http({method: 'POST',url: 'http://www.myposro.somee.com/webservice1.asmx/getSpecialOffers',data: $.param({ID : $rootScope.storeTypeId , StoreID : $rootScope.storeId }),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+	function successCallback(response) {
+		var x2js = new X2JS();
+		jsonResponse = x2js.xml_str2json(response.data);
+		$scope.products =JSON.parse(jsonResponse.string.__text);
+		console.log($scope.products.Table);
+	}
+	, function errorCallback(response) {alert(response);});
+	
 	$http({method: 'POST',url: 'http://www.myposro.somee.com/webservice1.asmx/getCategory',data: $.param({ID: '1' , StoreID: '4'}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
 	function successCallback(response) {
 		var x2js = new X2JS();
@@ -57,9 +68,11 @@ angular.module('starter.controllers', ['ui.router'])
     { title:'logo',price:'100',src: 'img/logo.png', id: 1 },
     { title:'ionic',price:'200',src: 'img/ionic.png', id: 2 }
   ];
+  
   $scope.addItem = function(id){
+	
   	$scope.modal.hide();
-  }
+  };
   $ionicModal.fromTemplateUrl('templates/addItem.html', {
     scope: $scope
   }).then(function(modal) {
@@ -98,6 +111,19 @@ angular.module('starter.controllers', ['ui.router'])
 		$scope.description="Loren ipsum Loren ipsumLoren ipsumLoren ipsumLoren ipsumLoren ipsumLoren ipsumLoren ipsum";    
     $scope.modal.show();
   };
+  
+	$scope.addItem = function(id){
+		
+		$scope.modal.show();
+		for (var i = 0; i <= $scope.products.Table.length ; i++) {
+			if($scope.products.Table[i].ProductID == id)
+			{
+				$scope.currentProduct=$scope.products.Table[i];
+				console.log($scope.currentProduct);
+			}
+		}
+	};
+  
   $scope.storeName="Pasro";
 })
 
@@ -106,9 +132,18 @@ angular.module('starter.controllers', ['ui.router'])
     { title:'logo',price:'100',src: 'img/logo.png', id: 1 },
     { title:'ionic',price:'200',src: 'img/ionic.png', id: 2 }
   ];
+  
   $scope.addItem = function(id){
+	$scope.currentProduct
     $scope.modal.hide();
-  }
+	for (var i = 0; i <= $scope.products.Table.length ; i++) {
+		if($scope.products.Table[i].ProductID == id)
+		{
+			$scope.currentProduct=$scope.products.Table[i];
+		}
+    }
+  };
+  
   $ionicModal.fromTemplateUrl('templates/addItem.html', {
     scope: $scope
   }).then(function(modal) {
@@ -139,6 +174,46 @@ angular.module('starter.controllers', ['ui.router'])
   $scope.storeName="Pasro";
 })
 
+.controller('StoreTypes', function($scope,$ionicModal,$state,$http,$rootScope) {
+  var jsonResponse ;
+  
+  $scope.storeTypes;
+  $http({method: 'POST',url: 'http://www.myposro.somee.com/webservice1.asmx/GetStoreTypes',data: $.param({ID:0,}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+	function successCallback(response) {
+		var x2js = new X2JS();
+		jsonResponse = x2js.xml_str2json(response.data);
+		$scope.storeTypes =JSON.parse(jsonResponse.string.__text);
+		console.log(jsonResponse);
+	}
+	, function errorCallback(response) {alert(response);});
+	
+	$scope.selectStoreTypes = function(ID)
+	{
+		$rootScope.storeTypeId = ID;
+		$state.go('stores');	
+	};
+})
+
+.controller('Stores', function($scope,$ionicModal,$state,$http,$rootScope) {
+  var jsonResponse ;
+  
+  $scope.stores;
+  $http({method: 'POST',url: 'http://www.myposro.somee.com/webservice1.asmx/getStore',data: $.param({ID:$rootScope.storeTypeId}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+	function successCallback(response) {
+		var x2js = new X2JS();
+		jsonResponse = x2js.xml_str2json(response.data);
+		$scope.storeTypes =JSON.parse(jsonResponse.string.__text);
+		console.log(jsonResponse);
+	}
+	, function errorCallback(response) {alert(response);});
+	
+	$scope.selectStore = function(ID)
+	{
+		$rootScope.storeId = ID;
+		$state.go('app.products');	
+	};
+})
+
 .controller('HomeCtrl', function($scope,$ionicModal,$http,$state) {
   $ionicModal.fromTemplateUrl('templates/login.html', {
     scope: $scope
@@ -154,7 +229,7 @@ angular.module('starter.controllers', ['ui.router'])
 		jsonResponse = x2js.xml_str2json(response.data);
 		if(jsonResponse.boolean == "true")
 		{
-			$state.go('location');
+			$state.go('storeTypes');
 			$scope.modal.hide();
 		}
 		else
@@ -177,6 +252,5 @@ angular.module('starter.controllers', ['ui.router'])
     //alert("hai");
 	$scope.login();
     };
-
 
 });

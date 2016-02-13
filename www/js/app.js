@@ -5,8 +5,8 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
 
-var urlBase='http://www.myposro1.somee.com';
-angular.module('starter', ['ionic', 'starter.controllers'])
+var urlBase='http://myposro.somee.com/webservice/MyPosroWebservice.asmx';
+angular.module('starter', ['ionic','starter.controllers','jett.ionic.filter.bar'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {

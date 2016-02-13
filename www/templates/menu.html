@@ -21,7 +21,7 @@
     </ion-header-bar>
     <ion-content>
       <ion-list>
-		<ion-item ng-repeat="category in jsonResponse.Table" >
+		<ion-item ng-repeat="category in jsonResponse.Table" ng-click="getProductForCategory({{category.CategoryID}})">
 			{{category.CategoryName}}
         </ion-item>
         <div class="item item-divider">

@@ -2,7 +2,7 @@
 	<ion-content>
 		<ion-list>
 			<ion-item ng-repeat="product in products.Table" class="item-thumbnail-left item-button-right" ng-click="addItem({{product.ProductID}})">
-				<img src="{{product.ImagePath}}">				
+				<img src="http://myposro.somee.com{{product.ImagePath | limitTo : 200 : 1}}">				
 				{{product.ProductName}}
 				<span class="item-note">
       			Rs{{product.StorePrice}}
@@ -14,7 +14,7 @@
 		</ion-list>
 	</ion-content>
 	<div class="bar bar-footer bar-balanced">
-		<button class="button button-balanced icon ion-camera " ng-click="photoList()">
+		<button class="button button-balanced icon ion-camera " ng-click="photoOrder()">
 		</button>
 	</div>
 </ion-view>

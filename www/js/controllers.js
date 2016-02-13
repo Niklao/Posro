@@ -46,7 +46,7 @@ angular.module('starter.controllers', ['ui.router'])
 	$scope.jsonResponse;
 	$scope.currentProduct;
 	
-	$http({method: 'POST',url: urlBase+'/webservice1.asmx/GetSpecialOffers',data: $.param({ID : $rootScope.storeTypeId , StoreID : $rootScope.storeId }),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+	$http({method: 'POST',url: urlBase+'/GetSpecialOffers',data: $.param({StoreID : $rootScope.storeId }),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
 	function successCallback(response) {
 		var x2js = new X2JS();
 		jsonResponse = x2js.xml_str2json(response.data);
@@ -55,7 +55,7 @@ angular.module('starter.controllers', ['ui.router'])
 	}
 	, function errorCallback(response) {alert(response);});
 	
-	$http({method: 'POST',url: urlBase+'/webservice1.asmx/GetCategory',data: $.param({ID: '1' , StoreID: '4'}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+	$http({method: 'POST',url: urlBase+'/GetCategory',data: $.param({ID: '1' , StoreID: $rootScope.storeId}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
 	function successCallback(response) {
 		var x2js = new X2JS();
 		var jsonResponse;
@@ -69,51 +69,56 @@ angular.module('starter.controllers', ['ui.router'])
     { title:'ionic',price:'200',src: 'img/ionic.png', id: 2 }
   ];
   
-  $scope.addItem = function(id){
-  	$scope.modal.hide();
-  };
   $ionicModal.fromTemplateUrl('templates/addItem.html', {
     scope: $scope
   }).then(function(modal) {
-    $scope.modal = modal;
+    $scope.addItemModal = modal;
   });
 
   $ionicModal.fromTemplateUrl('templates/checkout.html', {
     scope: $scope
   }).then(function(modal) {
-    $scope.modal2 = modal;
+    $scope.checkoutModal = modal;
   });
 
-  // Triggered in the login modal to close it
-  $scope.closeLogin = function() {
-    $scope.modal.hide();
+  $scope.cancelAddItem = function(id){
+  	$scope.addItemModal.hide();
   };
-
+  
   $scope.checkoutStore = function(id) {
-    //alert
     $scope.modal2.show();
   };
 
-  // Open product choosing Modal
-  $scope.addItem = function(id) {
-  		$scope.productSubs = [
-    		{ title:'logo',price:'100',src: 'img/logo.png', id: 1 },
-    		{ title:'logo',price:'100',src: 'img/logo.png', id: 1 },
-    		{ title:'logo',price:'100',src: 'img/logo.png', id: 1 },
-    		{ title:'logo',price:'100',src: 'img/logo.png', id: 1 },
-    		{ title:'logo',price:'100',src: 'img/logo.png', id: 1 },
-    		{ title:'logo',price:'100',src: 'img/logo.png', id: 1 },
-    		{ title:'logo',price:'100',src: 'img/logo.png', id: 1 }
-  		];
-  		
-		$scope.name=id;
-		$scope.description="Loren ipsum Loren ipsumLoren ipsumLoren ipsumLoren ipsumLoren ipsumLoren ipsumLoren ipsum";    
-    $scope.modal.show();
+  $scope.getProductForCategory = function(categoryId){
+	$http({method: 'POST',url: urlBase+'/GetProductforCategory',data: $.param({CategoryID: categoryId , StoreID: $rootScope.storeId}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+	function successCallback(response) {
+		var x2js = new X2JS();
+		jsonResponse = x2js.xml_str2json(response.data);
+		$scope.products =JSON.parse(jsonResponse.string.__text);
+		console.log($scope.products.Table);
+	}
+	, function errorCallback(response) {alert(response);});
   };
+  // Open product choosing Modal
+  // $scope.addItem = function(id) {
+  		// $scope.productSubs = [
+    		// { title:'logo',price:'100',src: 'img/logo.png', id: 1 },
+    		// { title:'logo',price:'100',src: 'img/logo.png', id: 1 },
+    		// { title:'logo',price:'100',src: 'img/logo.png', id: 1 },
+    		// { title:'logo',price:'100',src: 'img/logo.png', id: 1 },
+    		// { title:'logo',price:'100',src: 'img/logo.png', id: 1 },
+    		// { title:'logo',price:'100',src: 'img/logo.png', id: 1 },
+    		// { title:'logo',price:'100',src: 'img/logo.png', id: 1 }
+  		// ];
+  		
+		// $scope.name=id;
+		// $scope.description="Loren ipsum Loren ipsumLoren ipsumLoren ipsumLoren ipsumLoren ipsumLoren ipsumLoren ipsum";    
+		// $scope.addItemModal.show();
+  // };
   
 	$scope.addItem = function(id){
 		
-		$scope.modal.show();
+		$scope.addItemModal.show();
 		for (var i = 0; i <= $scope.products.Table.length ; i++) {
 			if($scope.products.Table[i].ProductID == id)
 			{
@@ -126,11 +131,19 @@ angular.module('starter.controllers', ['ui.router'])
 	$scope.photoList = function(){
 		try{
 			navigator.camera.getPicture(function(imageURI) {
-			alert(imageURI);
-			}, function(err) {
+				$http({method: 'POST',url: urlBase+'/SaveImageOrder',data: $.param({Comment:'kjfdknjgfdk',StoreID:'1',f:imageURI}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+				function successCallback(response) {
+					var x2js = new X2JS();
+					jsonResponse = x2js.xml_str2json(response.data);
+					$scope.storeTypes =JSON.parse(jsonResponse.string.__text);
+					console.log(jsonResponse);
+				}
+			, function errorCallback(response) {alert(response);});
+			}, 
+			function(err) {
 			alert('false');
 			}, { quality: 50,
-			destinationType: Camera.DestinationType.FILE_URI});
+			destinationType: Camera.DestinationType.DATA_URL});
 		}
 		catch(err)
 		{
@@ -188,11 +201,11 @@ angular.module('starter.controllers', ['ui.router'])
   $scope.storeName="Pasro";
 })
 
-.controller('StoreTypes', function($scope,$ionicModal,$state,$http,$rootScope) {
+.controller('StoreTypes', function($scope,$ionicModal,$state,$http,$rootScope,$ionicFilterBar) {
   var jsonResponse ;
   
   $scope.storeTypes;
-  $http({method: 'POST',url: urlBase+'/webservice1.asmx/GetStoreTypes',data: $.param({ID:0,}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+  $http({method: 'POST',url: urlBase+'/GetStoreTypes',data: $.param({ID:0,}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
 	function successCallback(response) {
 		var x2js = new X2JS();
 		jsonResponse = x2js.xml_str2json(response.data);
@@ -206,13 +219,25 @@ angular.module('starter.controllers', ['ui.router'])
 		$rootScope.storeTypeId = ID;
 		$state.go('stores');	
 	};
+	
+	$scope.showFilterBar = function () {
+      filterBarInstance = $ionicFilterBar.show({
+        items: $scope.items,
+        update: function (filteredItems, filterText) {
+          $scope.items = filteredItems;
+          if (filterText) {
+            console.log(filterText);
+          }
+        }
+      });
+    };
 })
 
 .controller('Stores', function($scope,$ionicModal,$state,$http,$rootScope) {
   var jsonResponse ;
   
   $scope.stores;
-  $http({method: 'POST',url: urlBase+'/webservice1.asmx/GetStore',data: $.param({ StoreTypeID : $rootScope.storeTypeId }),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+  $http({method: 'POST',url: urlBase+'/GetStore',data: $.param({ StoreTypeID : $rootScope.storeTypeId }),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
 	function successCallback(response) {
 		var x2js = new X2JS();
 		jsonResponse = x2js.xml_str2json(response.data);
@@ -243,7 +268,7 @@ angular.module('starter.controllers', ['ui.router'])
 
   $scope.userLogin= function(){
 	var jsonResponse ;
-	$http({method: 'POST',url: urlBase+'/webservice1.asmx/UserLogin',data: $.param({_UserName: $('#userName').val() ,_Password: $('#passWord').val()}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+	$http({method: 'POST',url: urlBase+'/UserLogin',data: $.param({_UserName: $('#userName').val() ,_Password: $('#passWord').val()}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
 	function successCallback(response) {
 		var x2js = new X2JS();
 		jsonResponse = x2js.xml_str2json(response.data);

@@ -2,14 +2,14 @@
   <ion-header-bar>
     <h1 class="title">Add</h1>
     <div class="buttons">
-      <button class="button button-clear" ng-click="closeLogin()">Close</button>
+      <button class="button button-clear" ng-click="cancelAddItem()">Close</button>
     </div>
   </ion-header-bar>
   <ion-content>
   		<form ng-submit="doLogin()">
 			<div class="list card">
 				<div class="item item-avatar">
-	    			<img src="{{currentProduct.ImagePath}}">
+	    			<img src="http://myposro.somee.com{{currentProduct.ImagePath | limitTo : 200 : 1}}">
     				<h2>{{currentProduct.ProductName}}</h2>
     				<p>Brand Name</p>
   				</div>

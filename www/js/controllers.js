@@ -263,16 +263,18 @@ angular.module('starter.controllers', ['ui.router'])
     // $scope.modal.show();
 	
 		alert('yo');
-		navigator.camera.getPicture(function(imageURI) {
+		try{
+			navigator.camera.getPicture(function(imageURI) {
 			alert(imageURI);
-
-		}, function(err) {
-
-    alert('false');
-
-  }, cameraOptions);
-	
-  };
+			}, function(err) {
+			alert('false');
+			}, cameraOptions);
+		}
+		catch(err)
+		{
+			alert(err);
+		}
+	};
   
   $scope.location = function() {
     //alert("hai");

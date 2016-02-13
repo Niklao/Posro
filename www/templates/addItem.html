@@ -9,14 +9,14 @@
   		<form ng-submit="doLogin()">
 			<div class="list card">
 				<div class="item item-avatar">
-	    			<img src="avatar.jpg">
+	    			<img src="{{currentProduct.ImagePath}}">
     				<h2>{{currentProduct.ProductName}}</h2>
     				<p>Brand Name</p>
   				</div>
   				<div class="item ">
     				<h3>Description:</h3>
     				<p>
-						{{description}}    			
+						{{currentProduct.Description}}    			
     				</p>
   				</div>
   				<div class="item ">

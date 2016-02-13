@@ -46,7 +46,7 @@ angular.module('starter.controllers', ['ui.router'])
 	$scope.jsonResponse;
 	$scope.currentProduct;
 	
-	$http({method: 'POST',url: 'http://www.myposro.somee.com/webservice1.asmx/getSpecialOffers',data: $.param({ID : $rootScope.storeTypeId , StoreID : $rootScope.storeId }),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+	$http({method: 'POST',url: urlBase+'/webservice1.asmx/getSpecialOffers',data: $.param({ID : $rootScope.storeTypeId , StoreID : $rootScope.storeId }),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
 	function successCallback(response) {
 		var x2js = new X2JS();
 		jsonResponse = x2js.xml_str2json(response.data);
@@ -55,7 +55,7 @@ angular.module('starter.controllers', ['ui.router'])
 	}
 	, function errorCallback(response) {alert(response);});
 	
-	$http({method: 'POST',url: 'http://www.myposro.somee.com/webservice1.asmx/getCategory',data: $.param({ID: '1' , StoreID: '4'}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+	$http({method: 'POST',url: urlBase+'/webservice1.asmx/getCategory',data: $.param({ID: '1' , StoreID: '4'}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
 	function successCallback(response) {
 		var x2js = new X2JS();
 		var jsonResponse;
@@ -123,6 +123,7 @@ angular.module('starter.controllers', ['ui.router'])
 			}
 		}
 	};
+
   
   $scope.storeName="Pasro";
 })
@@ -178,7 +179,7 @@ angular.module('starter.controllers', ['ui.router'])
   var jsonResponse ;
   
   $scope.storeTypes;
-  $http({method: 'POST',url: 'http://www.myposro.somee.com/webservice1.asmx/GetStoreTypes',data: $.param({ID:0,}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+  $http({method: 'POST',url: urlBase+'/webservice1.asmx/GetStoreTypes',data: $.param({ID:0,}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
 	function successCallback(response) {
 		var x2js = new X2JS();
 		jsonResponse = x2js.xml_str2json(response.data);
@@ -198,7 +199,7 @@ angular.module('starter.controllers', ['ui.router'])
   var jsonResponse ;
   
   $scope.stores;
-  $http({method: 'POST',url: 'http://www.myposro.somee.com/webservice1.asmx/getStore',data: $.param({ID:$rootScope.storeTypeId}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+  $http({method: 'POST',url: urlBase+'/webservice1.asmx/getStore',data: $.param({ID:$rootScope.storeTypeId}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
 	function successCallback(response) {
 		var x2js = new X2JS();
 		jsonResponse = x2js.xml_str2json(response.data);
@@ -220,10 +221,16 @@ angular.module('starter.controllers', ['ui.router'])
   }).then(function(modal) {
     $scope.modal = modal;
   });
+  
+  $ionicModal.fromTemplateUrl('templates/signUp.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $scope.signUpModal = modal;
+  });
 
   $scope.userLogin= function(){
 	var jsonResponse ;
-	$http({method: 'POST',url: 'http://www.myposro.somee.com/webservice1.asmx/UserLogin',data: $.param({_UserName: $('#userName').val() ,_Password: $('#passWord').val()}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+	$http({method: 'POST',url: urlBase+'/webservice1.asmx/UserLogin',data: $.param({_UserName: $('#userName').val() ,_Password: $('#passWord').val()}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
 	function successCallback(response) {
 		var x2js = new X2JS();
 		jsonResponse = x2js.xml_str2json(response.data);
@@ -243,11 +250,30 @@ angular.module('starter.controllers', ['ui.router'])
   $scope.closeLogin = function() {
     $scope.modal.hide();
   };
-
-  $scope.login = function() {
-    $scope.modal.show();
+  
+  $scope.closeSignUp = function() {
+    $scope.signUpModal.hide();
+  };
+  
+  $scope.signUpPage = function() {
+    $scope.signUpModal.show();
   };
 
+  $scope.login = function() {
+    // $scope.modal.show();
+	
+		alert('yo');
+		navigator.camera.getPicture(function(imageURI) {
+			alert(imageURI);
+
+		}, function(err) {
+
+    // Ruh-roh, something bad happened
+
+  }, cameraOptions);
+	
+  };
+  
   $scope.location = function() {
     //alert("hai");
 	$scope.login();

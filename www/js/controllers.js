@@ -269,7 +269,7 @@ angular.module('starter.controllers', ['ui.router'])
 			}, function(err) {
 			alert('false');
 			}, { quality: 50,
-    destinationType: Camera.DestinationType.DATA_URL});
+    destinationType: Camera.DestinationType.FILE_URI});
 		}
 		catch(err)
 		{

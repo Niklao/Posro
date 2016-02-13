@@ -3,6 +3,13 @@
 	<h1 class="title">Select Stores</h1>
 	</ion-header-bar>
 	<ion-content>
+		<div class="list">
+			<a class="item item-thumbnail-left" ng-repeat="store in stores.Table" ng-click="selectStore(store.StoreID)">
+				<img src="http://myposro.somee.com{{store.LOGO | limitTo : 200 : 1}}">
+				<h2>{{store.StoreName}}</h2>
+				<!--<p>Back off, man. I'm a scientist.</p>-->
+			</a>
+		</div>
 		<ion-item ng-repeat="store in storeTypes.Table" ng-click="selectStore(store.StoreID)">	
 			{{store.StoreName}}
 		</ion-item>

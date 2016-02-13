@@ -46,7 +46,7 @@ angular.module('starter.controllers', ['ui.router'])
 	$scope.jsonResponse;
 	$scope.currentProduct;
 	
-	$http({method: 'POST',url: urlBase+'/webservice1.asmx/getSpecialOffers',data: $.param({ID : $rootScope.storeTypeId , StoreID : $rootScope.storeId }),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+	$http({method: 'POST',url: urlBase+'/webservice1.asmx/GetSpecialOffers',data: $.param({ID : $rootScope.storeTypeId , StoreID : $rootScope.storeId }),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
 	function successCallback(response) {
 		var x2js = new X2JS();
 		jsonResponse = x2js.xml_str2json(response.data);
@@ -55,7 +55,7 @@ angular.module('starter.controllers', ['ui.router'])
 	}
 	, function errorCallback(response) {alert(response);});
 	
-	$http({method: 'POST',url: urlBase+'/webservice1.asmx/getCategory',data: $.param({ID: '1' , StoreID: '4'}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+	$http({method: 'POST',url: urlBase+'/webservice1.asmx/GetCategory',data: $.param({ID: '1' , StoreID: '4'}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
 	function successCallback(response) {
 		var x2js = new X2JS();
 		var jsonResponse;
@@ -70,7 +70,6 @@ angular.module('starter.controllers', ['ui.router'])
   ];
   
   $scope.addItem = function(id){
-	
   	$scope.modal.hide();
   };
   $ionicModal.fromTemplateUrl('templates/addItem.html', {
@@ -124,6 +123,20 @@ angular.module('starter.controllers', ['ui.router'])
 		}
 	};
 
+	$scope.photoList = function(){
+		try{
+			navigator.camera.getPicture(function(imageURI) {
+			alert(imageURI);
+			}, function(err) {
+			alert('false');
+			}, { quality: 50,
+			destinationType: Camera.DestinationType.FILE_URI});
+		}
+		catch(err)
+		{
+			alert(err);
+		}
+	};
   
   $scope.storeName="Pasro";
 })
@@ -199,11 +212,11 @@ angular.module('starter.controllers', ['ui.router'])
   var jsonResponse ;
   
   $scope.stores;
-  $http({method: 'POST',url: urlBase+'/webservice1.asmx/getStore',data: $.param({ID:$rootScope.storeTypeId}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+  $http({method: 'POST',url: urlBase+'/webservice1.asmx/GetStore',data: $.param({ StoreTypeID : $rootScope.storeTypeId }),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
 	function successCallback(response) {
 		var x2js = new X2JS();
 		jsonResponse = x2js.xml_str2json(response.data);
-		$scope.storeTypes =JSON.parse(jsonResponse.string.__text);
+		$scope.stores =JSON.parse(jsonResponse.string.__text);
 		console.log(jsonResponse);
 	}
 	, function errorCallback(response) {alert(response);});
@@ -259,22 +272,9 @@ angular.module('starter.controllers', ['ui.router'])
     $scope.signUpModal.show();
   };
 
-  $scope.login = function() {
-    // $scope.modal.show();
-	
-		alert('yo');
-		try{
-			navigator.camera.getPicture(function(imageURI) {
-			alert(imageURI);
-			}, function(err) {
-			alert('false');
-			}, { quality: 50,
-    destinationType: Camera.DestinationType.FILE_URI});
-		}
-		catch(err)
-		{
-			alert(err);
-		}
+	$scope.login = function() {
+		$scope.modal.show();
+		
 	};
   
   $scope.location = function() {

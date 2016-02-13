@@ -19,6 +19,7 @@
 						{{currentProduct.Description}}    			
     				</p>
   				</div>
+				<!--
   				<div class="item ">
   					<h3>Select Type:</h3>
   					<div class="list">
@@ -31,8 +32,13 @@
   						</label>
   					</div>
   				</div>
+				-->
+				<label class="item item-input item-floating-label">
+					<span class="input-label">Quantity</span>
+					<input type="number" placeholder="1" id="quantity" value='1'>
+				</label>
   				<div class="item" href="#">
-    				<button class="button button-block button-positive" type="submit">Add To Cart</button>
+    				<button class="button button-block button-positive" type="submit" ng-click="addToCart()">Add To Cart</button>
   				</div>
 			</div>
     	</form>

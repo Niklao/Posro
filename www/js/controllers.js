@@ -41,7 +41,7 @@ angular.module('starter.controllers', ['ui.router'])
   };
 })
 
-.controller('ProductsCtrl', function($scope,$ionicModal,$http,$rootScope) {
+.controller('ProductsCtrl', function($scope,$ionicModal,$http,$rootScope,ionicToast) {
 
 	$scope.jsonResponse;
 	$scope.currentProduct;
@@ -86,7 +86,7 @@ angular.module('starter.controllers', ['ui.router'])
   };
   
   $scope.checkoutStore = function(id) {
-    $scope.modal2.show();
+    $scope.checkoutModal.show();
   };
 
   $scope.getProductForCategory = function(categoryId){
@@ -117,7 +117,6 @@ angular.module('starter.controllers', ['ui.router'])
   // };
   
 	$scope.addItem = function(id){
-		
 		$scope.addItemModal.show();
 		for (var i = 0; i <= $scope.products.Table.length ; i++) {
 			if($scope.products.Table[i].ProductID == id)
@@ -150,7 +149,21 @@ angular.module('starter.controllers', ['ui.router'])
 			alert(err);
 		}
 	};
-  
+	
+	$scope.addToCart = function(){
+		$scope.addItemModal.hide();
+		$http({method: 'POST',url: urlBase+'/AddToCart',data: $.param({ProductID:$scope.currentProduct.ProductID,Quantity:$('#quantity').val(),StoreID:$rootScope.storeId}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+				function successCallback(response) {
+					var x2js = new X2JS();
+					jsonResponse = x2js.xml_str2json(response.data);
+					if(jsonResponse.boolean.__text == 'true')
+						ionicToast.show($scope.currentProduct.ProductName+' Added To Cart', 'top', true, 2500);
+					else
+						ionicToast.show('Product Entry Failed', 'top', true, 2500);
+				}
+		, function errorCallback(response) {alert(response);});
+	};
+
   $scope.storeName="Pasro";
 })
 

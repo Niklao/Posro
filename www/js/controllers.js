@@ -268,7 +268,7 @@ angular.module('starter.controllers', ['ui.router'])
 
 		}, function(err) {
 
-    // Ruh-roh, something bad happened
+    alert('false');
 
   }, cameraOptions);
 	

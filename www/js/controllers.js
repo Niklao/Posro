@@ -128,7 +128,7 @@ angular.module('starter.controllers', ['ui.router'])
 		}
 	};
 
-	$scope.photoList = function(){
+	$scope.photoOrder = function(){
 		try{
 			navigator.camera.getPicture(function(imageURI) {
 				$http({method: 'POST',url: urlBase+'/SaveImageOrder',data: $.param({Comment:'kjfdknjgfdk',StoreID:'1',f:imageURI}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(

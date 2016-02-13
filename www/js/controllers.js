@@ -268,7 +268,8 @@ angular.module('starter.controllers', ['ui.router'])
 			alert(imageURI);
 			}, function(err) {
 			alert('false');
-			}, cameraOptions);
+			}, { quality: 50,
+    destinationType: Camera.DestinationType.DATA_URL});
 		}
 		catch(err)
 		{

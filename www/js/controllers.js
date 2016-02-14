@@ -228,7 +228,7 @@ angular.module('starter.controllers', ['ui.router'])
 	$scope.photoOrder = function(){
 		try{
 			navigator.camera.getPicture(function(imageURI) {
-				vm.upload = $upload.upload({
+				Upload = $upload.upload({
                     url: 'http://myposro1.somee.com/handler2.ashx',
                     data: {file : imageURI, name: 'hi.jpg' },
                     file: imageURI, // or list of files ($files) for html5 only

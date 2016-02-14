@@ -4,12 +4,12 @@
       <ion-nav-back-button>
       </ion-nav-back-button>
       <ion-nav-buttons side="left">
-      <button class="button button-icon button-clear ion-navicon" menu-toggle="left">
-      </button>
+		<button class="button button-icon button-clear ion-navicon" menu-toggle="left">
+		</button>
       </ion-nav-buttons>
       <ion-nav-buttons side="right">
-      <button class="button pull-right icon ion-bag" ng-click="checkoutStore()">
-      </button>
+		<button class="button button-icon icon ion-ios-search-strong" ng-click="showFilterBar()">
+		</button>
       </ion-nav-buttons>
     </ion-nav-bar>
     <ion-nav-view name="menuContent">
@@ -21,6 +21,12 @@
     </ion-header-bar>
     <ion-content>
       <ion-list>
+		<div class="list list-inset">
+			<label class="item item-input">
+				<i class="icon ion-search placeholder-icon"></i>
+				<input type="text" id="searchCategory" placeholder="Search Category">
+			</label>
+		</div>
 		<ion-item ng-repeat="category in jsonResponse.Table" ng-click="getProductForCategory({{category.CategoryID}})">
 			{{category.CategoryName}}
         </ion-item>

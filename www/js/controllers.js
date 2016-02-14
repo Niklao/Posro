@@ -41,10 +41,87 @@ angular.module('starter.controllers', ['ui.router'])
   };
 })
 
-.controller('ProductsCtrl', function($scope,$ionicModal,$http,$rootScope,ionicToast) {
+.controller('ProductsCtrl', function($scope,$ionicModal,$http,$rootScope,ionicToast,$ionicFilterBar) {
 
 	$scope.jsonResponse;
 	$scope.currentProduct;
+	$scope.data = {showDelete: false};
+	$scope.cartProducts;
+	$scope.products;
+	
+	$scope.showFilterBar = function () {
+      filterBarInstance = $ionicFilterBar.show({
+        items: $scope.items,
+        update: function (filteredItems, filterText) {
+          $scope.items = filteredItems;
+          if (filterText) {
+            console.log(filterText);
+          }
+        }
+      });
+    };
+	
+	$scope.searchFullStore = function(){
+		var query = $('.filter-bar-search').val();
+		if(query.length > 2 )
+		{
+			$http({method: 'POST',url: urlBase+'/SearchFullStore',data: $.param({Search:query,StoreID:$rootScope.storeId}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+			function successCallback(response) {
+				var x2js = new X2JS();
+				jsonResponse = x2js.xml_str2json(response.data);
+				$scope.products =JSON.parse(jsonResponse.string.__text);
+				console.log(jsonResponse);
+				$scope.storeTypes='';
+			}
+			, function errorCallback(response) {alert(response);});
+		}
+	};
+	
+	$("body").on('keyup', '.filter-bar-search', $scope.searchFullStore );	
+	
+	$scope.searchCategory = function(){
+
+		var query = $('#searchCategory').val();
+		if(query.length >2 )
+		{
+			$http({method: 'POST',url: urlBase+'/SearchCategory',data: $.param({Search:query,StoreID:$rootScope.storeId}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+			function successCallback(response) {
+				var x2js = new X2JS();
+				var jsonResponse;
+				jsonResponse = x2js.xml_str2json(response.data);
+				$scope.jsonResponse = JSON.parse(jsonResponse.string.__text);
+			}
+			, function errorCallback(response) {alert(response);});
+		}
+		else
+		{
+			$http({method: 'POST',url: urlBase+'/GetCategory',data: $.param({StoreID: $rootScope.storeId}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+			function successCallback(response) {
+				var x2js = new X2JS();
+				var jsonResponse;
+				jsonResponse = x2js.xml_str2json(response.data);
+				$scope.jsonResponse = JSON.parse(jsonResponse.string.__text);
+			}
+			, function errorCallback(response) {alert(response);});
+		}
+	};
+	
+	$scope.getProductForCategory = function (ID){
+		$http({method: 'POST',url: urlBase+'/GetProductforCategory',data: $.param({StoreID: $rootScope.storeId, CategoryID: ID,}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+			function successCallback(response) {
+				$scope.products='';
+				var x2js = new X2JS();
+				var jsonResponse;
+				jsonResponse = x2js.xml_str2json(response.data);
+				$scope.products = JSON.parse(jsonResponse.string.__text);
+				console.log($scope.products);
+			}
+			, function errorCallback(response) {alert(response);});
+	};
+	
+	$scope.searchCategory();
+	
+	$("body").on('keyup', '#searchCategory', $scope.searchCategory );
 	
 	$http({method: 'POST',url: urlBase+'/GetSpecialOffers',data: $.param({StoreID : $rootScope.storeId }),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
 	function successCallback(response) {
@@ -55,7 +132,7 @@ angular.module('starter.controllers', ['ui.router'])
 	}
 	, function errorCallback(response) {alert(response);});
 	
-	$http({method: 'POST',url: urlBase+'/GetCategory',data: $.param({ID: '1' , StoreID: $rootScope.storeId}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+	$http({method: 'POST',url: urlBase+'/GetCategory',data: $.param({StoreID: $rootScope.storeId}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
 	function successCallback(response) {
 		var x2js = new X2JS();
 		var jsonResponse;
@@ -63,11 +140,6 @@ angular.module('starter.controllers', ['ui.router'])
 		$scope.jsonResponse = JSON.parse(jsonResponse.string.__text);
 	}
 	, function errorCallback(response) {alert(response);});
-
-  $scope.products = [
-    { title:'logo',price:'100',src: 'img/logo.png', id: 1 },
-    { title:'ionic',price:'200',src: 'img/ionic.png', id: 2 }
-  ];
   
   $ionicModal.fromTemplateUrl('templates/addItem.html', {
     scope: $scope
@@ -86,35 +158,46 @@ angular.module('starter.controllers', ['ui.router'])
   };
   
   $scope.checkoutStore = function(id) {
-    $scope.checkoutModal.show();
-  };
-
-  $scope.getProductForCategory = function(categoryId){
-	$http({method: 'POST',url: urlBase+'/GetProductforCategory',data: $.param({CategoryID: categoryId , StoreID: $rootScope.storeId}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+    $http({method: 'POST',url: urlBase+'/GetShoppingCart',data: $.param({StoreID: $rootScope.storeId}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
 	function successCallback(response) {
 		var x2js = new X2JS();
 		jsonResponse = x2js.xml_str2json(response.data);
-		$scope.products =JSON.parse(jsonResponse.string.__text);
+		$scope.cartProducts =JSON.parse(jsonResponse.string.__text);
+		console.log($scope.products.Table);
+		ionicToast.show('Order Placed', 'top', true, 2500);
+	}
+	, function errorCallback(response) {alert(response);});
+	
+	$scope.checkoutModal.show();
+  };
+
+  $scope.closeCheckOut = function () {
+	$scope.checkoutModal.hide();
+  };
+  
+  $scope.confirmOrder =function () {
+	$scope.closeCheckOut();
+	$http({method: 'POST',url: urlBase+'/ConfirmOrder',data: $.param({StoreID: $rootScope.storeId,comment:'sdnirfnierfni'}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+	function successCallback(response) {
+		var x2js = new X2JS();
+		jsonResponse = x2js.xml_str2json(response.data);
+		$scope.cartProducts =JSON.parse(jsonResponse.string.__text);
 		console.log($scope.products.Table);
 	}
 	, function errorCallback(response) {alert(response);});
   };
-  // Open product choosing Modal
-  // $scope.addItem = function(id) {
-  		// $scope.productSubs = [
-    		// { title:'logo',price:'100',src: 'img/logo.png', id: 1 },
-    		// { title:'logo',price:'100',src: 'img/logo.png', id: 1 },
-    		// { title:'logo',price:'100',src: 'img/logo.png', id: 1 },
-    		// { title:'logo',price:'100',src: 'img/logo.png', id: 1 },
-    		// { title:'logo',price:'100',src: 'img/logo.png', id: 1 },
-    		// { title:'logo',price:'100',src: 'img/logo.png', id: 1 },
-    		// { title:'logo',price:'100',src: 'img/logo.png', id: 1 }
-  		// ];
-  		
-		// $scope.name=id;
-		// $scope.description="Loren ipsum Loren ipsumLoren ipsumLoren ipsumLoren ipsumLoren ipsumLoren ipsumLoren ipsum";    
-		// $scope.addItemModal.show();
-  // };
+  
+  $scope.onItemDelete = function(item) {
+	$http({method: 'POST',url: urlBase+'/CancelOrderOrItem',data: $.param({StoreID: $rootScope.storeId,ProductID: item.ProductID}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+	function successCallback(response) {
+		var x2js = new X2JS();
+		jsonResponse = x2js.xml_str2json(response.data);
+		$scope.cartProducts =JSON.parse(jsonResponse.string.__text);
+		console.log($scope.products.Table);
+	}
+	, function errorCallback(response) {alert(response);});
+	$scope.cartProducts.Table.splice($scope.cartProducts.Table.indexOf(item), 1);
+  };
   
 	$scope.addItem = function(id){
 		$scope.addItemModal.show();
@@ -215,17 +298,43 @@ angular.module('starter.controllers', ['ui.router'])
 })
 
 .controller('StoreTypes', function($scope,$ionicModal,$state,$http,$rootScope,$ionicFilterBar) {
-  var jsonResponse ;
   
-  $scope.storeTypes;
-  $http({method: 'POST',url: urlBase+'/GetStoreTypes',data: $.param({ID:0,}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
-	function successCallback(response) {
-		var x2js = new X2JS();
-		jsonResponse = x2js.xml_str2json(response.data);
-		$scope.storeTypes =JSON.parse(jsonResponse.string.__text);
-		console.log(jsonResponse);
-	}
-	, function errorCallback(response) {alert(response);});
+	var jsonResponse ;
+	$scope.storeTypes;
+  
+  	$scope.searchProductInLocation = function(){
+		var query = $('.filter-bar-search').val();
+		if(query.length >2 )
+		{
+			$http({method: 'POST',url: urlBase+'/SearchProductInLocation',data: $.param({Search:query,}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+			function successCallback(response) {
+				var x2js = new X2JS();
+				jsonResponse = x2js.xml_str2json(response.data);
+				$scope.products =JSON.parse(jsonResponse.string.__text);
+				console.log(jsonResponse);
+				$scope.storeTypes='';
+			}
+			, function errorCallback(response) {alert(response);});
+		}
+	};
+	
+	$scope.goToStore = function(ID){
+		$rootScope.storeId = ID;
+		$state.go('app.products');
+	};
+	
+	$("body").on('keyup', '.filter-bar-search', $scope.searchProductInLocation );	
+  
+	$scope.getStoreTypes = function(){
+		$http({method: 'POST',url: urlBase+'/GetStoreTypes',data: $.param({ID:0,}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+			function successCallback(response) {
+				var x2js = new X2JS();
+				jsonResponse = x2js.xml_str2json(response.data);
+				$scope.storeTypes =JSON.parse(jsonResponse.string.__text);
+				console.log(jsonResponse);
+			}
+			, function errorCallback(response) {alert(response);});
+	};
 	
 	$scope.selectStoreTypes = function(ID)
 	{
@@ -244,6 +353,8 @@ angular.module('starter.controllers', ['ui.router'])
         }
       });
     };
+	
+	$scope.getStoreTypes();
 })
 
 .controller('Stores', function($scope,$ionicModal,$state,$http,$rootScope) {

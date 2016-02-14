@@ -38,6 +38,18 @@
 				<img style="padding:10px;width:100%;" src="http://myposro.somee.com{{storeType.ImagePath | limitTo : 200 : 1}}" />
             </div>
 		</div>
+		<ion-list>
+				<ion-item ng-repeat="product in products.Table" class="item-thumbnail-left item-button-right" ng-click="goToStore({{product.StoreID}})">
+					<img src="http://myposro.somee.com{{product.ImagePath | limitTo : 200 : 1}}">				
+					{{product.ProductName}}
+					<span class="item-note">
+					Rs{{product.StorePrice}}
+					</span>
+					<button class="button button-positive" >
+					<i class="ion-ios-cart-outline"></i>
+					</button>
+				</ion-item>
+			</ion-list>
 	</ion-content>
 </ion-pane>
 

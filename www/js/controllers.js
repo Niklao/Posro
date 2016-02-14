@@ -1,53 +1,72 @@
 angular.module('starter.controllers', ['ui.router'])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout ) {
-
-  // With the new view caching in Ionic, Controllers are only called
-  // when they are recreated or on app start, instead of every page change.
-  // To listen for when this page is active (for example, to refresh data),
-  // listen for the $ionicView.enter event:
-  //$scope.$on('$ionicView.enter', function(e) {
-  //});
-
-  // Form data for the login modal
+  
   $scope.loginData = {};
 
-  // Create the login modal that we will use later
   $ionicModal.fromTemplateUrl('templates/login.html', {
     scope: $scope
   }).then(function(modal) {
     $scope.modal = modal;
   });
 
-  // Triggered in the login modal to close it
   $scope.closeLogin = function() {
     $scope.modal.hide();
   };
 
-  // Open the login modal
   $scope.login = function() {
     $scope.modal.show();
   };
 
-  // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
     console.log('Doing login', $scope.loginData);
-
-    // Simulate a login delay. Remove this and replace with your login
-    // code if using a login system
     $timeout(function() {
       $scope.closeLogin();
     }, 1000);
   };
 })
 
-.controller('ProductsCtrl', function($scope,$ionicModal,$http,$rootScope,ionicToast,$ionicFilterBar) {
+.controller('ProductsCtrl', function($scope,$ionicModal,$http,$rootScope,ionicToast,$ionicFilterBar,Upload) {
 
 	$scope.jsonResponse;
 	$scope.currentProduct;
 	$scope.data = {showDelete: false};
 	$scope.cartProducts;
 	$scope.products;
+	
+	$ionicModal.fromTemplateUrl('templates/settings.html', {
+		scope: $scope
+	}).then(function(modal) {
+		$scope.settingsModal = modal;
+	});
+	
+	$ionicModal.fromTemplateUrl('templates/feedback.html', {
+		scope: $scope
+	}).then(function(modal) {
+		$scope.feedbackModal = modal;
+	});
+
+	$ionicModal.fromTemplateUrl('templates/addItem.html', {
+		scope: $scope
+	}).then(function(modal) {
+		$scope.addItemModal = modal;
+	});
+	
+	$scope.showSettings = function (){
+		$scope.settingsModal.show();
+	};
+	
+	$scope.closeSettings = function (){
+		$scope.settingsModal.hide();
+	};
+	
+	$scope.showFeeback = function (){
+		$scope.settingsModal.show();
+	};
+	
+	$scope.closeSettings = function (){
+		$scope.settingsModal.hide();
+	};
 	
 	$scope.showFilterBar = function () {
       filterBarInstance = $ionicFilterBar.show({
@@ -141,11 +160,7 @@ angular.module('starter.controllers', ['ui.router'])
 	}
 	, function errorCallback(response) {alert(response);});
   
-  $ionicModal.fromTemplateUrl('templates/addItem.html', {
-    scope: $scope
-  }).then(function(modal) {
-    $scope.addItemModal = modal;
-  });
+  
 
   $ionicModal.fromTemplateUrl('templates/checkout.html', {
     scope: $scope
@@ -213,14 +228,17 @@ angular.module('starter.controllers', ['ui.router'])
 	$scope.photoOrder = function(){
 		try{
 			navigator.camera.getPicture(function(imageURI) {
-				$http({method: 'POST',url: urlBase+'/SaveImageOrder',data: $.param({Comment:'kjfdknjgfdk',StoreID:'1',f:imageURI}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
-				function successCallback(response) {
-					var x2js = new X2JS();
-					jsonResponse = x2js.xml_str2json(response.data);
-					$scope.storeTypes =JSON.parse(jsonResponse.string.__text);
-					console.log(jsonResponse);
-				}
-			, function errorCallback(response) {alert(response);});
+				vm.upload = $upload.upload({
+                    url: 'http://myposro1.somee.com/handler2.ashx',
+                    data: {file : imageURI, name: 'hi.jpg' },
+                    file: imageURI, // or list of files ($files) for html5 only
+                }).progress(function (evt) {
+                    //console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
+                }).success(function (data, status, headers, config) {
+                    alert('Uploaded successfully ' + file.name);
+                }).error(function (err) {
+                    alert('Error occured during upload');
+                });
 			}, 
 			function(err) {
 			alert('false');

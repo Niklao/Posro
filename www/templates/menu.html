@@ -42,8 +42,12 @@
         <ion-item menu-close href="#/app/browse">
           Logout
         </ion-item>
-        <ion-item menu-close href="#/location">
-          <i class="icon ion-ios-location"></i>
+		<ion-item menu-close ng-click="feedack()">
+          <i class="icon ion-chatbubble-working"></i>
+          Feedback
+        </ion-item>
+        <ion-item menu-close ng-click="settings()">
+          <i class="icon ion-ios-gear"></i>
           Settings
         </ion-item>
       </ion-list>

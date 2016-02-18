@@ -231,8 +231,8 @@ angular.module('starter.controllers', ['ui.router'])
 				Upload = $upload.upload({
                     url: 'http://myposro1.somee.com/handler2.ashx',
                     data: {file : imageURI, name: 'hi.jpg' },
-                    file: imageURI, // or list of files ($files) for html5 only
                 }).progress(function (evt) {
+                    file: imageURI, // or list of files ($files) for html5 only
                     //console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
                 }).success(function (data, status, headers, config) {
                     alert('Uploaded successfully ' + file.name);

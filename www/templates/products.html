@@ -12,8 +12,13 @@
 		</ion-list>
 		-->
 		<div class="row" ng-repeat="product in products.Table" ng-if="$even">
-			<div class="col col-50" ng-repeat="product in [products.Table[$index],products.Table[$index + 1]]">
+			<div class="col col-50" ng-repeat="product in [products.Table[$index],products.Table[$index + 1]]" ng-if="product.ProductName">
 				<img style="padding:10px;width:100%;" src="http://myposro.somee.com{{product.ImagePath | limitTo : 200 : 1}}" />
+				<div style="position:relative;line-height:30px;height:30px;width:100%;">{{product.ProductName}}</div>
+				<!--<div style="position:relative;line-height:30px;height:30px;width:100%;line-height:15px;color:">{{product.BrandName}}</div>-->
+				<div style="position:relative;line-height:30px;height:30px;width:100%;font-size:15px;background:rgb(104,104,104);color:white;">
+					<div style="margin-left:10px;">&#8377 {{product.StorePrice}}</div>
+				</div>
             </div>
 		</div>
 	</ion-content>

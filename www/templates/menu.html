@@ -27,7 +27,7 @@
 				<input type="text" id="searchCategory" placeholder="Search Category">
 			</label>
 		</div>
-		<ion-item ng-repeat="category in jsonResponse.Table" ng-click="getProductForCategory({{category.CategoryID}})">
+		<ion-item menu-close ng-repeat="category in jsonResponse.Table" ng-click="getProductForCategory({{category.CategoryID}})">
 			{{category.CategoryName}}
         </ion-item>
         <div class="item item-divider">

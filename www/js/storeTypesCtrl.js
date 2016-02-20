@@ -26,6 +26,7 @@ angular.module('starter.storeTypesCtrl', ['ui.router'])
 				$scope.products =JSON.parse(jsonResponse.string.__text);
 				console.log(jsonResponse);
 				$scope.storeTypes='';
+				alert('yo');
 			}
 			, function errorCallback(response) {alert(response);});
 		}
@@ -48,7 +49,7 @@ angular.module('starter.storeTypesCtrl', ['ui.router'])
 				console.log(jsonResponse);
 				$scope.hideWaiter();
 			}
-			, function errorCallback(response) {$scope.showWaiter();});
+			, function errorCallback(response) {$scope.hideWaiter();ionicToast.show('Username Password don\'t match.','middle',false,2500);});
 	};
 	
 	$scope.selectStoreTypes = function(ID)
@@ -68,6 +69,11 @@ angular.module('starter.storeTypesCtrl', ['ui.router'])
         }
       });
     };
+	
+	$scope.selectStore = function () {
+		$rootScope.storeId = ID;
+		$state.go('app.products');
+	};
 	
 	$scope.getStoreTypes();
 });

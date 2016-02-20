@@ -1,12 +1,22 @@
 angular.module('starter.productsCtrl', ['ui.router'])
 
-.controller('ProductsCtrl', function($scope,$ionicModal,$http,$rootScope,ionicToast,$ionicFilterBar,Upload,$ionicPopup) {
+.controller('ProductsCtrl', function($scope,$ionicModal,$http,$rootScope,$ionicFilterBar,Upload,$ionicPopup,ionicToast,$ionicLoading) {
 
 	$scope.jsonResponse;
 	$scope.currentProduct;
 	$scope.data = {showDelete: false};
 	$scope.cartProducts;
 	$scope.products;
+	
+	$scope.showWaiter = function() {
+        $ionicLoading.show({
+          template: 'Loading...'
+        });
+	};
+      
+	$scope.hideWaiter = function(){
+		$ionicLoading.hide();
+	};
 	
 	$ionicModal.fromTemplateUrl('templates/settings.html', {
 		scope: $scope
@@ -43,15 +53,24 @@ angular.module('starter.productsCtrl', ['ui.router'])
 	};
 	
 	$scope.sendFeedback = function (){
-		$http({method: 'POST',url: urlBase+'/SaveSuggestion',data: $.param({Suggestion:$('#suggestion').html}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+		$scope.showWaiter();
+		$http({method: 'POST',url: urlBase+'/SaveSuggestion',data: $.param({Suggestion:$('#suggestion').html()}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
 		function successCallback(response) {
 			var x2js = new X2JS();
 			jsonResponse = x2js.xml_str2json(response.data);
-			$scope.products =JSON.parse(jsonResponse.string.__text);
-			console.log(jsonResponse);
-			$scope.storeTypes='';
+			if(jsonResponse.boolean == "true")
+			{
+				$scope.hideWaiter();
+				$scope.feedbackModal.hide();
+				ionicToast.show('Feedback Saved', 'top', true, 2500);
+			}
+			else
+			{
+				$scope.hideWaiter();
+				ionicToast.show('Activity Failed','middle',false,2500);
+			}
 		}
-		, function errorCallback(response) {alert(response);});
+		, function errorCallback(response) {$scope.hideWaiter();ionicToast.show('Activity Failed', 'top', true, 2500);});
 	};
 	
 	$scope.showFilterBar = function () {
@@ -85,7 +104,6 @@ angular.module('starter.productsCtrl', ['ui.router'])
 	$("body").on('keyup', '.filter-bar-search', $scope.searchFullStore );	
 	
 	$scope.searchCategory = function(){
-
 		var query = $('#searchCategory').val();
 		if(query.length >2 )
 		{
@@ -128,23 +146,27 @@ angular.module('starter.productsCtrl', ['ui.router'])
 	
 	$("body").on('keyup', '#searchCategory', $scope.searchCategory );
 	
-	$http({method: 'POST',url: urlBase+'/GetSpecialOffers',data: $.param({StoreID : $rootScope.storeId }),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
-	function successCallback(response) {
-		var x2js = new X2JS();
-		jsonResponse = x2js.xml_str2json(response.data);
-		$scope.products =JSON.parse(jsonResponse.string.__text);
-		console.log($scope.products.Table);
-	}
-	, function errorCallback(response) {alert(response);});
-	
-	$http({method: 'POST',url: urlBase+'/GetCategory',data: $.param({StoreID: $rootScope.storeId}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
-	function successCallback(response) {
-		var x2js = new X2JS();
-		var jsonResponse;
-		jsonResponse = x2js.xml_str2json(response.data);
-		$scope.jsonResponse = JSON.parse(jsonResponse.string.__text);
-	}
-	, function errorCallback(response) {alert(response);});
+	$scope.getSpecialOfferAndgetCategory = function (){
+		$scope.showWaiter();
+		$http({method: 'POST',url: urlBase+'/GetSpecialOffers',data: $.param({StoreID : $rootScope.storeId }),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+		function successCallback(response) {
+			var x2js = new X2JS();
+			jsonResponse = x2js.xml_str2json(response.data);
+			$scope.products =JSON.parse(jsonResponse.string.__text);
+			console.log($scope.products.Table);
+		}
+		, function errorCallback(response) {ionicToast.show('Load Failed.','middle',false,2500);});
+		
+		$http({method: 'POST',url: urlBase+'/GetCategory',data: $.param({StoreID: $rootScope.storeId}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+		function successCallback(response) {
+			var x2js = new X2JS();
+			var jsonResponse;
+			jsonResponse = x2js.xml_str2json(response.data);
+			$scope.jsonResponse = JSON.parse(jsonResponse.string.__text);
+			$scope.hideWaiter();
+		}
+		, function errorCallback(response) {ionicToast.show('Load Failed.','middle',false,2500);});
+	};
   
 	$scope.filterResult = function (){
 		var myPopup = $ionicPopup.show({
@@ -281,4 +303,6 @@ angular.module('starter.productsCtrl', ['ui.router'])
 	};
 
   $scope.storeName="Pasro";
+  
+  $scope.getSpecialOfferAndgetCategory();
 });

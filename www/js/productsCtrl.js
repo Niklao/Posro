@@ -1,6 +1,6 @@
 angular.module('starter.productsCtrl', ['ui.router'])
 
-.controller('ProductsCtrl', function($scope,$ionicModal,$http,$rootScope,ionicToast,$ionicFilterBar,Upload) {
+.controller('ProductsCtrl', function($scope,$ionicModal,$http,$rootScope,ionicToast,$ionicFilterBar,Upload,$ionicPopup) {
 
 	$scope.jsonResponse;
 	$scope.currentProduct;
@@ -35,11 +35,23 @@ angular.module('starter.productsCtrl', ['ui.router'])
 	};
 	
 	$scope.showFeeback = function (){
-		$scope.settingsModal.show();
+		$scope.feedbackModal.show();
 	};
 	
-	$scope.closeSettings = function (){
-		$scope.settingsModal.hide();
+	$scope.closeFeedback = function (){
+		$scope.feedbackModal.hide();
+	};
+	
+	$scope.sendFeedback = function (){
+		$http({method: 'POST',url: urlBase+'/SaveSuggestion',data: $.param({Suggestion:$('#suggestion').html}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+		function successCallback(response) {
+			var x2js = new X2JS();
+			jsonResponse = x2js.xml_str2json(response.data);
+			$scope.products =JSON.parse(jsonResponse.string.__text);
+			console.log(jsonResponse);
+			$scope.storeTypes='';
+		}
+		, function errorCallback(response) {alert(response);});
 	};
 	
 	$scope.showFilterBar = function () {
@@ -134,7 +146,36 @@ angular.module('starter.productsCtrl', ['ui.router'])
 	}
 	, function errorCallback(response) {alert(response);});
   
-  
+	$scope.filterResult = function (){
+		var myPopup = $ionicPopup.show({
+		template: '<input type="password" ng-model="data.wifi">',
+		title: 'Filters',
+		subTitle: 'Please use normal things',
+		scope: $scope,
+		buttons: [
+		  { text: 'Cancel' },
+		  {
+			text: '<b>Apply</b>',
+			type: 'button-positive',
+			onTap: function(e) {
+			  if (!$scope.data.wifi) {
+				e.preventDefault();
+			  } else {
+				return $scope.data.wifi;
+			  }
+			}
+		  }
+		]
+	  });
+
+		myPopup.then(function(res) {
+			console.log('Tapped!', res);
+		});
+
+		$timeout(function() {
+			myPopup.close();
+		}, 3000);
+	};
 
   $ionicModal.fromTemplateUrl('templates/checkout.html', {
     scope: $scope

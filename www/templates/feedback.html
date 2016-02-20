@@ -1,15 +1,25 @@
 <ion-modal-view>
   <ion-header-bar>
-      <div class="buttons">
-        <button class="button button-icon icon ion-ios-minus-outline"
-          ng-click="data.showDelete = !data.showDelete; data.showReorder = false"></button>
-      </div>
-      <h1 class="title">Settings</h1>
+      <h1 class="title">Submit Feedback</h1>
 	  <div class="buttons">
       <button class="button button-clear" ng-click="closeFeedback()">Close</button>
     </div>
     </ion-header-bar>
 	<ion-content>
-		
+		<div class="list list-inset">
+			<label class="item item-input">
+				<input type="text" placeholder="title">
+			</label>
+			<label class="item item-input">
+				<textarea id="suggestion" placeholder="suggestions"></textarea>
+			</label>
+		</div>
+		<div class="card">
+			<div class="item item-text-wrap">
+				<button class="button button-balanced button-block" ng-click="sendFeedback()">
+					Submit
+				</button>
+			</div>
+		</div>
     </ion-content>
 </ion-modal-view>

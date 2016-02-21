@@ -94,8 +94,6 @@ angular.module('starter.productsCtrl', ['ui.router'])
 				var x2js = new X2JS();
 				jsonResponse = x2js.xml_str2json(response.data);
 				$scope.products =JSON.parse(jsonResponse.string.__text);
-				console.log(jsonResponse);
-				$scope.storeTypes='';
 			}
 			, function errorCallback(response) {alert(response);});
 		}

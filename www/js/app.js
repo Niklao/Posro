@@ -6,7 +6,7 @@
 // 'starter.controllers' is found in controllers.js
 
 var urlBase='http://myposro.somee.com/webservice/MyPosroWebservice.asmx';
-angular.module('starter', ['ionic','starter.productsCtrl','starter.homeCtrl','starter.storesCtrl','starter.storeTypesCtrl','starter.locationCtrl','jett.ionic.filter.bar','ionic-toast','ngFileUpload'])
+angular.module('starter', ['ionic','starter.productsCtrl','starter.homeCtrl','starter.storesCtrl','starter.storeTypesCtrl','starter.locationCtrl','jett.ionic.filter.bar','ionic-toast','ngFileUpload','ionic-timepicker', 'ionic-multi-date-picker'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {

@@ -5,6 +5,60 @@ angular.module('starter.storeTypesCtrl', ['ui.router'])
 	var jsonResponse ;
 	$scope.storeTypes;
 	
+	var s0 = new Date()
+	, s1 = new Date(1993, 01, 30);
+	$scope.birthSelectedDates = [s1];
+	$scope.currentSelectedDates = [s0];
+	
+	$scope.birthDatepickerObjectNeo = {
+		templateType: 'POPUP',
+		btnsIsNative: true,
+		btnOk: 'OK',
+		btnOkClass: 'notNeeded',
+		btnCancel: 'Close',
+		btnCancelClass: 'button button-neoOrange',
+		btnTodayShow: true,
+		btnToday: 'Today',
+		btnTodayClass: 'button button-neoOrange',
+		selectedDates : $scope.birthSelectedDates,
+		selectType: 'PERIOD',
+		closeOnSelect: true,
+		callback: function (dates) {  //Mandatory
+		retSelectedBirthDates(dates);
+		}
+    };
+
+	var retSelectedBirthDates = function (dates) {
+		$scope.birthSelectedDates.length = 0;
+		for (var i = 0; i < dates.length; i++) {
+		  $scope.birthSelectedDates.push(angular.copy(dates[i]));
+		}
+	};
+  
+	$scope.timePickerObject24HourBirth = {
+      inputEpochTime: ((new Date()).getHours() * 60 * 60 + (new Date()).getMinutes() * 60),  //Optional
+      step : 1,
+      format: 24,  //Optional
+      titleLabel: '24-hour Format',  //Optional
+      closeLabel: 'Cancel',  //Optional
+      setLabel: 'Select',  //Optional
+      setButtonType: 'button-balanced',  //Optional
+      closeButtonType: 'button-positive',  //Optional
+      callback: function (val) {    //Mandatory
+        timePicker24CallbackBirth(val);
+      }
+    };
+
+    function timePicker24CallbackBirth(val) {
+      if (typeof (val) === 'undefined') {
+        console.log('Time not selected');
+      } else {
+        $scope.timePickerObject24HourBirth.inputEpochTime = val;
+        var selectedTime = new Date(val * 1000);
+        console.log('Selected epoch is : ', val, 'and the time is ', selectedTime.getUTCHours(), ':', selectedTime.getUTCMinutes(), 'in UTC');
+      }
+    }
+  
 	$scope.showWaiter = function() {
         $ionicLoading.show({
           template: 'Loading...'
@@ -13,6 +67,20 @@ angular.module('starter.storeTypesCtrl', ['ui.router'])
       
 	$scope.hideWaiter = function(){
 		$ionicLoading.hide();
+	};
+	
+	$ionicModal.fromTemplateUrl('templates/meetAndEvents.html', {
+		scope: $scope
+	}).then(function(modal) {
+		$scope.meetAndEventsModal = modal;
+	});
+	
+	$scope.showMeetAndEvents = function (){
+		$scope.meetAndEventsModal.show();
+	};
+	
+	$scope.closeMeetAndEvents = function (){
+		$scope.meetAndEventsModal.hide();
 	};
 	
   	$scope.searchProductInLocation = function(){

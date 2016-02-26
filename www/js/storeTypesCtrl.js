@@ -5,10 +5,8 @@ angular.module('starter.storeTypesCtrl', ['ui.router'])
 	var jsonResponse ;
 	$scope.storeTypes;
 	
-	var s0 = new Date()
-	, s1 = new Date(1993, 01, 30);
-	$scope.birthSelectedDates = [s1];
-	$scope.currentSelectedDates = [s0];
+	var s0 = new Date();
+	$scope.selectedDates = [s0];
 	
 	$scope.birthDatepickerObjectNeo = {
 		templateType: 'POPUP',
@@ -20,8 +18,8 @@ angular.module('starter.storeTypesCtrl', ['ui.router'])
 		btnTodayShow: true,
 		btnToday: 'Today',
 		btnTodayClass: 'button button-neoOrange',
-		selectedDates : $scope.birthSelectedDates,
-		selectType: 'PERIOD',
+		selectedDates : $scope.selectedDates,
+		selectType: 'SINGLE',
 		closeOnSelect: true,
 		callback: function (dates) {  //Mandatory
 		retSelectedBirthDates(dates);
@@ -29,9 +27,9 @@ angular.module('starter.storeTypesCtrl', ['ui.router'])
     };
 
 	var retSelectedBirthDates = function (dates) {
-		$scope.birthSelectedDates.length = 0;
+		$scope.selectedDates.length = 0;
 		for (var i = 0; i < dates.length; i++) {
-		  $scope.birthSelectedDates.push(angular.copy(dates[i]));
+		  $scope.selectedDates.push(angular.copy(dates[i]));
 		}
 	};
   
@@ -81,6 +79,19 @@ angular.module('starter.storeTypesCtrl', ['ui.router'])
 	
 	$scope.closeMeetAndEvents = function (){
 		$scope.meetAndEventsModal.hide();
+	};
+
+	$scope.sendMeetAndEvents = function (){
+		$http({method: 'POST',url: urlBase+'/SaveMeetNEvents',data: $.param({ID: ' ',categoryID:' ',eventname:$('#eventTitle').val(),locationID:' ',ConveyesBy:$('#conveyedBy').val(),description:$('#description').val(),venue:$('#venue').val(),contactnum1:$('#contactNo1').val(),DateFrom:' ',DateTo:' '}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+		function successCallback(response) {
+			var x2js = new X2JS();
+			jsonResponse = x2js.xml_str2json(response.data);
+			$scope.products =JSON.parse(jsonResponse.string.__text);
+			console.log(jsonResponse);
+			$scope.storeTypes='';
+			alert('yo');
+		}
+		, function errorCallback(response) {alert(response);});
 	};
 	
   	$scope.searchProductInLocation = function(){

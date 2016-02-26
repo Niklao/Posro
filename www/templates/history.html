@@ -1,0 +1,19 @@
+<ion-modal-view>
+  <ion-header-bar>
+      <h1 class="title">History</h1>
+	  <div class="buttons">
+      	<button class="button button-clear" ng-click="closeHistory()">Close</button>
+    	</div>
+    </ion-header-bar>
+	<ion-content>
+		<ion-list show-delete="data.showDelete" >
+			<ion-item ng-repeat="item in previousOrders.Table"  item="item" ng-click="" class="item-remove-animate">
+					<h2>{{ item.OrderDate }}</h2>
+					<p>&#8377 {{ item.Column1 }}</p>
+					<span class="item-note">
+      					{{ item.StoreName }}
+    				</span>
+			</ion-item>
+		</ion-list>
+    </ion-content>
+</ion-modal-view>

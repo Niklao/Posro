@@ -39,10 +39,11 @@
         <ion-item menu-close href="#/app/search">
           Change Store
         </ion-item>
-        <ion-item menu-close href="#/app/browse">
-          Logout
+        <ion-item menu-close ng-click="showHistory()">
+          <i class="icon ion-calendar"></i>
+          History
         </ion-item>
-		<ion-item menu-close ng-click="showFeeback()">
+		    <ion-item menu-close ng-click="showFeeback()">
           <i class="icon ion-chatbubble-working"></i>
           Feedback
         </ion-item>

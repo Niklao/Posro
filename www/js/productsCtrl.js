@@ -18,24 +18,14 @@ angular.module('starter.productsCtrl', ['ui.router'])
 		$ionicLoading.hide();
 	};
 	
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	$ionicModal.fromTemplateUrl('templates/settings.html', {
 		scope: $scope
 	}).then(function(modal) {
 		$scope.settingsModal = modal;
 	});
-	
-	$ionicModal.fromTemplateUrl('templates/feedback.html', {
-		scope: $scope
-	}).then(function(modal) {
-		$scope.feedbackModal = modal;
-	});
 
-	$ionicModal.fromTemplateUrl('templates/addItem.html', {
-		scope: $scope
-	}).then(function(modal) {
-		$scope.addItemModal = modal;
-	});
-	
 	$scope.showSettings = function (){
 		$scope.settingsModal.show();
 	};
@@ -43,7 +33,15 @@ angular.module('starter.productsCtrl', ['ui.router'])
 	$scope.closeSettings = function (){
 		$scope.settingsModal.hide();
 	};
-	
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+
+	$ionicModal.fromTemplateUrl('templates/feedback.html', {
+		scope: $scope
+	}).then(function(modal) {
+		$scope.feedbackModal = modal;
+	});
+
 	$scope.showFeeback = function (){
 		$scope.feedbackModal.show();
 	};
@@ -51,7 +49,7 @@ angular.module('starter.productsCtrl', ['ui.router'])
 	$scope.closeFeedback = function (){
 		$scope.feedbackModal.hide();
 	};
-	
+
 	$scope.sendFeedback = function (){
 		$scope.showWaiter();
 		$http({method: 'POST',url: urlBase+'/SaveSuggestion',data: $.param({Suggestion:$('#suggestion').html()}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
@@ -72,6 +70,71 @@ angular.module('starter.productsCtrl', ['ui.router'])
 		}
 		, function errorCallback(response) {$scope.hideWaiter();ionicToast.show('Activity Failed', 'top', true, 2500);});
 	};
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+
+	$ionicModal.fromTemplateUrl('templates/addItem.html', {
+		scope: $scope
+	}).then(function(modal) {
+		$scope.addItemModal = modal;
+	});
+	
+	$scope.addItem = function(id){
+		$scope.addItemModal.show();
+		for (var i = 0; i <= $scope.products.Table.length ; i++) {
+			if($scope.products.Table[i].ProductID == id)
+			{
+				$scope.currentProduct=$scope.products.Table[i];
+				console.log($scope.currentProduct);
+			}
+		}
+	};
+
+	$scope.cancelAddItem = function(id){
+  		$scope.addItemModal.hide();
+  	};
+
+  	$scope.addToCart = function(){
+		$scope.addItemModal.hide();
+		$http({method: 'POST',url: urlBase+'/AddToCart',data: $.param({ProductID:$scope.currentProduct.ProductID,Quantity:$('#quantity').val(),StoreID:$rootScope.storeId}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+				function successCallback(response) {
+					var x2js = new X2JS();
+					jsonResponse = x2js.xml_str2json(response.data);
+					if(jsonResponse.boolean.__text == 'true')
+						ionicToast.show($scope.currentProduct.ProductName+' Added To Cart', 'top', true, 2500);
+					else
+						ionicToast.show('Product Entry Failed', 'top', true, 2500);
+				}
+		, function errorCallback(response) {alert(response);});
+	};
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////	
+	
+	$ionicModal.fromTemplateUrl('templates/history.html', {
+		scope: $scope
+	}).then(function(modal) {
+		$scope.historyModal = modal;
+	});
+
+	$scope.showHistory = function () {
+		$scope.historyModal.show();
+		$http({method: 'POST',url: urlBase+'/getOrderHistory',data: $.param({StoreID:$rootScope.storeId}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+			function successCallback(response) {
+				var x2js = new X2JS();
+				jsonResponse = x2js.xml_str2json(response.data);
+				$scope.previousOrders =JSON.parse(jsonResponse.string.__text);
+			}
+			, function errorCallback(response) {alert(response);});
+	};
+	
+	$scope.closeHistory = function () {
+		$scope.historyModal.hide();
+	};
+
+	$scope.openHistory = function () {
+	};
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	$scope.showFilterBar = function () {
       filterBarInstance = $ionicFilterBar.show({
@@ -203,9 +266,7 @@ angular.module('starter.productsCtrl', ['ui.router'])
     $scope.checkoutModal = modal;
   });
 
-  $scope.cancelAddItem = function(id){
-  	$scope.addItemModal.hide();
-  };
+  
   
   $scope.checkoutStore = function(id) {
     $http({method: 'POST',url: urlBase+'/GetShoppingCart',data: $.param({StoreID: $rootScope.storeId}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
@@ -249,16 +310,6 @@ angular.module('starter.productsCtrl', ['ui.router'])
 	$scope.cartProducts.Table.splice($scope.cartProducts.Table.indexOf(item), 1);
   };
   
-	$scope.addItem = function(id){
-		$scope.addItemModal.show();
-		for (var i = 0; i <= $scope.products.Table.length ; i++) {
-			if($scope.products.Table[i].ProductID == id)
-			{
-				$scope.currentProduct=$scope.products.Table[i];
-				console.log($scope.currentProduct);
-			}
-		}
-	};
 
 	$scope.photoOrder = function(){
 		// try{
@@ -285,22 +336,9 @@ angular.module('starter.productsCtrl', ['ui.router'])
 			// alert(err);
 		// }
 	};
-	
-	$scope.addToCart = function(){
-		$scope.addItemModal.hide();
-		$http({method: 'POST',url: urlBase+'/AddToCart',data: $.param({ProductID:$scope.currentProduct.ProductID,Quantity:$('#quantity').val(),StoreID:$rootScope.storeId}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
-				function successCallback(response) {
-					var x2js = new X2JS();
-					jsonResponse = x2js.xml_str2json(response.data);
-					if(jsonResponse.boolean.__text == 'true')
-						ionicToast.show($scope.currentProduct.ProductName+' Added To Cart', 'top', true, 2500);
-					else
-						ionicToast.show('Product Entry Failed', 'top', true, 2500);
-				}
-		, function errorCallback(response) {alert(response);});
-	};
 
-  $scope.storeName="Pasro";
+
+  	$scope.storeName="Pasro";
   
-  $scope.getSpecialOfferAndgetCategory();
+  	$scope.getSpecialOfferAndgetCategory();
 });

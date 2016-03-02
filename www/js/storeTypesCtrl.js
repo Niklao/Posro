@@ -89,7 +89,6 @@ angular.module('starter.storeTypesCtrl', ['ui.router'])
 			$scope.products =JSON.parse(jsonResponse.string.__text);
 			console.log(jsonResponse);
 			$scope.storeTypes='';
-			alert('yo');
 		}
 		, function errorCallback(response) {alert(response);});
 	};
@@ -105,7 +104,6 @@ angular.module('starter.storeTypesCtrl', ['ui.router'])
 				$scope.products =JSON.parse(jsonResponse.string.__text);
 				console.log(jsonResponse);
 				$scope.storeTypes='';
-				alert('yo');
 			}
 			, function errorCallback(response) {alert(response);});
 		}
@@ -131,11 +129,76 @@ angular.module('starter.storeTypesCtrl', ['ui.router'])
 			, function errorCallback(response) {$scope.hideWaiter();ionicToast.show('Username Password don\'t match.','middle',false,2500);});
 	};
 	
+	/////////////////////////////////////////////////////////////////////////////////////////////////	
+
+	$ionicModal.fromTemplateUrl('templates/storesModal.html', {
+		scope: $scope
+	}).then(function(modal) {
+		$scope.storesModal = modal;
+	});
+	
+	$scope.showStores = function (){
+		$scope.storesModal.show();
+	};
+	
+	$scope.closeStores = function (){
+		$scope.storesModal.hide();
+	};
+
+	$scope.getStore = function () {
+		$scope.showWaiter();
+		$http({method: 'POST',url: urlBase+'/GetStore',data: $.param({ StoreTypeID : $rootScope.storeTypeId }),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+		function successCallback(response) {
+			var x2js = new X2JS();
+			jsonResponse = x2js.xml_str2json(response.data);
+			$scope.stores =JSON.parse(jsonResponse.string.__text);
+			console.log(jsonResponse);
+			$scope.hideWaiter();
+		}
+		, function errorCallback(response) {$scope.hideWaiter();});
+	};
+
 	$scope.selectStoreTypes = function(ID)
 	{
 		$rootScope.storeTypeId = ID;
-		$state.go('stores');	
+		$scope.getStore();
+		$scope.showStores();
 	};
+
+	$scope.selectStore = function(ID)
+	{
+		$scope.closeStores();
+		$rootScope.storeId = ID;
+		$state.go('app.products');	
+	};
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	$ionicModal.fromTemplateUrl('templates/history.html', {
+		scope: $scope
+	}).then(function(modal) {
+		$scope.historyModal = modal;
+	});
+
+	$scope.showHistory = function () {
+		$scope.historyModal.show();
+		$http({method: 'POST',url: urlBase+'/getOrderHistory',data: $.param({StoreID:$rootScope.storeId}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+			function successCallback(response) {
+				var x2js = new X2JS();
+				jsonResponse = x2js.xml_str2json(response.data);
+				$scope.previousOrders =JSON.parse(jsonResponse.string.__text);
+			}
+			, function errorCallback(response) {alert(response);});
+	};
+	
+	$scope.closeHistory = function () {
+		$scope.historyModal.hide();
+	};
+
+	$scope.openHistory = function () {
+	};
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	$scope.showFilterBar = function () {
       filterBarInstance = $ionicFilterBar.show({
@@ -148,11 +211,6 @@ angular.module('starter.storeTypesCtrl', ['ui.router'])
         }
       });
     };
-	
-	$scope.selectStore = function () {
-		$rootScope.storeId = ID;
-		$state.go('app.products');
-	};
 	
 	$scope.getStoreTypes();
 });

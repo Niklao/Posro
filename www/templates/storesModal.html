@@ -1,0 +1,19 @@
+<ion-modal-view>
+  <ion-header-bar>
+      <h1 class="title icon ion-android-cart"> Select Store</h1>
+	  <div class="buttons">
+      <button class="button button-clear" ng-click="closeStores()">Close</button>
+    </div>
+    </ion-header-bar>
+	<ion-content>
+		<div class="list">
+			<a class="item item-thumbnail-left" ng-repeat="store in stores.Table" ng-click="selectStore(store.StoreID)">
+				<img src="http://myposro.somee.com{{store.LOGO | limitTo : 200 : 1}}">
+				<h2>{{store.StoreName}}</h2>
+				<p>{{store.StoreNum}}</p>
+				<p>{{store.DeliveryTime}}</p>
+				<p>{{store.TodaysStatus}}</p>
+			</a>
+		</div>
+    </ion-content>
+</ion-modal-view>

@@ -13,6 +13,7 @@
 	      <ion-list show-delete="data.showDelete" >
 			<ion-item ng-repeat="item in cartProducts.Table"  item="item" href="#/item/{{item.id}}" class="item-remove-animate">
 					{{ item.ProductName }}
+					<p>Quantity : {{ item.Quantity }}</p>
 			  <ion-delete-button class="ion-minus-circled" ng-click="onItemDelete(item)">
 			  </ion-delete-button>
 			</ion-item>

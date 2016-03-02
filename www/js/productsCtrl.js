@@ -164,6 +164,8 @@ angular.module('starter.productsCtrl', ['ui.router'])
 	
 	$("body").on('keyup', '.filter-bar-search', $scope.searchFullStore );	
 	
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+
 	$scope.searchCategory = function(){
 		var query = $('#searchCategory').val();
 		if(query.length >2 )
@@ -206,6 +208,8 @@ angular.module('starter.productsCtrl', ['ui.router'])
 	$scope.searchCategory();
 	
 	$("body").on('keyup', '#searchCategory', $scope.searchCategory );
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	$scope.getSpecialOfferAndgetCategory = function (){
 		$scope.showWaiter();
@@ -260,56 +264,56 @@ angular.module('starter.productsCtrl', ['ui.router'])
 		}, 3000);
 	};
 
-  $ionicModal.fromTemplateUrl('templates/checkout.html', {
-    scope: $scope
-  }).then(function(modal) {
-    $scope.checkoutModal = modal;
-  });
+	/////////////////////////////////////////////////////////////////////////////////////////////////
 
+  	$ionicModal.fromTemplateUrl('templates/checkout.html', {
+    	scope: $scope
+  	}).then(function(modal) {
+    	$scope.checkoutModal = modal;
+  	});
+
+  	$scope.checkoutStore = function(id) {
+    	$http({method: 'POST',url: urlBase+'/GetShoppingCart',data: $.param({StoreID: $rootScope.storeId}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+		function successCallback(response) {
+			var x2js = new X2JS();
+			jsonResponse = x2js.xml_str2json(response.data);
+			$scope.cartProducts =JSON.parse(jsonResponse.string.__text);
+			console.log($scope.products.Table);
+		}
+		, function errorCallback(response) {alert(response);});
+		$scope.checkoutModal.show();
+  	};
+
+  	$scope.closeCheckOut = function () {
+		$scope.checkoutModal.hide();
+  	};
   
+  	$scope.confirmOrder =function () {
+		$scope.closeCheckOut();
+		$http({method: 'POST',url: urlBase+'/ConfirmOrder',data: $.param({StoreID: $rootScope.storeId,comment:'sdnirfnierfni'}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+		function successCallback(response) {
+			var x2js = new X2JS();
+			jsonResponse = x2js.xml_str2json(response.data);
+			$scope.cartProducts =JSON.parse(jsonResponse.string.__text);
+			console.log($scope.products.Table);
+			ionicToast.show('Order Placed', 'top', true, 2500);
+		}
+		, function errorCallback(response) {alert(response);});
+  	};
   
-  $scope.checkoutStore = function(id) {
-    $http({method: 'POST',url: urlBase+'/GetShoppingCart',data: $.param({StoreID: $rootScope.storeId}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
-	function successCallback(response) {
-		var x2js = new X2JS();
-		jsonResponse = x2js.xml_str2json(response.data);
-		$scope.cartProducts =JSON.parse(jsonResponse.string.__text);
-		console.log($scope.products.Table);
-		ionicToast.show('Order Placed', 'top', true, 2500);
-	}
-	, function errorCallback(response) {alert(response);});
+  	$scope.onItemDelete = function(item) {
+		$http({method: 'POST',url: urlBase+'/CancelOrderOrItem',data: $.param({StoreID: $rootScope.storeId,ProductID: item.ProductID}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+		function successCallback(response) {
+			var x2js = new X2JS();
+			jsonResponse = x2js.xml_str2json(response.data);
+			$scope.cartProducts =JSON.parse(jsonResponse.string.__text);
+			console.log($scope.products.Table);
+		}
+		, function errorCallback(response) {alert(response);});
+		$scope.cartProducts.Table.splice($scope.cartProducts.Table.indexOf(item), 1);
+  	};
 	
-	$scope.checkoutModal.show();
-  };
-
-  $scope.closeCheckOut = function () {
-	$scope.checkoutModal.hide();
-  };
-  
-  $scope.confirmOrder =function () {
-	$scope.closeCheckOut();
-	$http({method: 'POST',url: urlBase+'/ConfirmOrder',data: $.param({StoreID: $rootScope.storeId,comment:'sdnirfnierfni'}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
-	function successCallback(response) {
-		var x2js = new X2JS();
-		jsonResponse = x2js.xml_str2json(response.data);
-		$scope.cartProducts =JSON.parse(jsonResponse.string.__text);
-		console.log($scope.products.Table);
-	}
-	, function errorCallback(response) {alert(response);});
-  };
-  
-  $scope.onItemDelete = function(item) {
-	$http({method: 'POST',url: urlBase+'/CancelOrderOrItem',data: $.param({StoreID: $rootScope.storeId,ProductID: item.ProductID}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
-	function successCallback(response) {
-		var x2js = new X2JS();
-		jsonResponse = x2js.xml_str2json(response.data);
-		$scope.cartProducts =JSON.parse(jsonResponse.string.__text);
-		console.log($scope.products.Table);
-	}
-	, function errorCallback(response) {alert(response);});
-	$scope.cartProducts.Table.splice($scope.cartProducts.Table.indexOf(item), 1);
-  };
-  
+	/////////////////////////////////////////////////////////////////////////////////////////////////  
 
 	$scope.photoOrder = function(){
 		// try{
@@ -340,5 +344,8 @@ angular.module('starter.productsCtrl', ['ui.router'])
 
   	$scope.storeName="Pasro";
   
-  	$scope.getSpecialOfferAndgetCategory();
+  	// $scope.$on($viewContentLoaded, function() {
+    	$scope.getSpecialOfferAndgetCategory();
+  	// });
+  	
 });

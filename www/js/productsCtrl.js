@@ -101,9 +101,9 @@ angular.module('starter.productsCtrl', ['ui.router'])
 					var x2js = new X2JS();
 					jsonResponse = x2js.xml_str2json(response.data);
 					if(jsonResponse.boolean.__text == 'true')
-						ionicToast.show($scope.currentProduct.ProductName+' Added To Cart', 'top', true, 2500);
+						ionicToast.show($scope.currentProduct.ProductName+' Added To Cart', 'middle', false, 2500);
 					else
-						ionicToast.show('Product Entry Failed', 'top', true, 2500);
+						ionicToast.show('Product Entry Failed', 'middle', false, 2500);
 				}
 		, function errorCallback(response) {alert(response);});
 	};
@@ -116,23 +116,41 @@ angular.module('starter.productsCtrl', ['ui.router'])
 		$scope.historyModal = modal;
 	});
 
+	$ionicModal.fromTemplateUrl('templates/orderList.html', {
+		scope: $scope
+	}).then(function(modal) {
+		$scope.historyModal = modal;
+	});
+
+
 	$scope.showHistory = function () {
 		$scope.historyModal.show();
-		$http({method: 'POST',url: urlBase+'/getOrderHistory',data: $.param({StoreID:$rootScope.storeId}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+		$scope.showWaiter();
+		$http({method: 'POST',url: urlBase+'/GetOrderHistory',data: $.param({StoreID:$rootScope.storeId}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
 			function successCallback(response) {
 				var x2js = new X2JS();
 				jsonResponse = x2js.xml_str2json(response.data);
 				$scope.previousOrders =JSON.parse(jsonResponse.string.__text);
+				scope.hideWaiter();
 			}
-			, function errorCallback(response) {alert(response);});
+			, function errorCallback(response) {scope.hideWaiter();});
+	};
+
+	$scope.getOrderHistoryList = function (id) {
+		scope.showWaiter();
+		$http({method: 'POST',url: urlBase+'/GetOrderHistoryList',data: $.param({OrderID :ID}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+			function successCallback(response) {
+				var x2js = new X2JS();
+				jsonResponse = x2js.xml_str2json(response.data);
+				$scope.previousOrders =JSON.parse(jsonResponse.string.__text);
+				scope.hideWaiter();
+			}
+			, function errorCallback(response) {scope.hideWaiter();});
 	};
 	
 	$scope.closeHistory = function () {
 		$scope.historyModal.hide();
-	};
-
-	$scope.openHistory = function () {
-	};
+	};	
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -288,6 +306,17 @@ angular.module('starter.productsCtrl', ['ui.router'])
 		$scope.checkoutModal.hide();
   	};
   
+  	$scope.checkPromoCode = function() {
+		$http({method: 'POST',url: urlBase+'/ApplyCoupon',data: $.param({StoreID: $rootScope.storeId , CouponCode : $('#couponCode').val()}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+			function successCallback(response) {
+				var x2js = new X2JS();
+				jsonResponse = x2js.xml_str2json(response.data);
+				$scope.offerStatus =JSON.parse(jsonResponse.string.__text);
+				console.log($scope.products.Table);
+			}
+		, function errorCallback(response) {alert(response);});
+	};
+
   	$scope.confirmOrder =function () {
 		$scope.closeCheckOut();
 		$http({method: 'POST',url: urlBase+'/ConfirmOrder',data: $.param({StoreID: $rootScope.storeId,comment:'sdnirfnierfni'}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
@@ -316,29 +345,37 @@ angular.module('starter.productsCtrl', ['ui.router'])
 	/////////////////////////////////////////////////////////////////////////////////////////////////  
 
 	$scope.photoOrder = function(){
-		// try{
-			// navigator.camera.getPicture(function(imageURI) {
-				// Upload = $upload.upload({
-                    // url: 'http://myposro1.somee.com/handler2.ashx',
-                    // data: {file : imageURI, name: 'hi.jpg' },
-                // }).progress(function (evt) {
-                    // file: imageURI, // or list of files ($files) for html5 only
-                    // console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
-                // }).success(function (data, status, headers, config) {
-                    // alert('Uploaded successfully ' + file.name);
-                // }).error(function (err) {
-                    // alert('Error occured during upload');
-                // });
-			// }, 
-			// function(err) {
-			// alert('false');
-			// }, { quality: 50,
-			// destinationType: Camera.DestinationType.DATA_URL});
-		// }
-		// catch(err)
-		// {
-			// alert(err);
-		// }
+		try{
+			navigator.camera.getPicture(function(imageURI) {
+				
+				$http({method: 'POST',url: urlBase+'/OrderImage',data: $.param({Comment: 'Order Should be on time' ,FileString: $scope.image,StoreID: '1'}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+					function successCallback(response) {
+						var x2js = new X2JS();
+						jsonResponse = x2js.xml_str2json(response.data);
+						if(jsonResponse.boolean == "true")
+						{
+							$scope.hideWaiter();
+							ionicToast.show('Uploaded','middle',false,2500);
+							$scope.modal.hide();
+						}
+						else
+						{
+							$scope.hideWaiter();
+							ionicToast.show('Upload failed','middle',false,2500);
+						}
+					}
+					, function errorCallback(response) {ionicToast.show('Couldn\'t Connect image upload','middle',false,2500);});
+				
+			}, 
+			function(err) {
+			alert('false');
+			}, { quality: 10,
+			destinationType: Camera.DestinationType.DATA_URL});
+		}
+		catch(err)
+		{
+			alert(err);
+		}
 	};
 
 

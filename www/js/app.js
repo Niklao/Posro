@@ -5,7 +5,9 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
 
-var urlBase='http://myposro.somee.com/webservice/MyPosroWebservice.asmx';
+// var urlBase='http://myposro.somee.com/webservice/MyPosroWebservice.asmx';
+var urlBase='http://myposro1.somee.com/webservice1.asmx';
+
 angular.module('starter', ['ionic','starter.productsCtrl','starter.homeCtrl','starter.storesCtrl','starter.storeTypesCtrl','starter.locationCtrl','jett.ionic.filter.bar','ionic-toast','ngFileUpload','ionic-timepicker', 'ionic-multi-date-picker'])
 
 .run(function($ionicPlatform) {

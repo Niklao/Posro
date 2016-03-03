@@ -13,11 +13,25 @@
 	      <ion-list show-delete="data.showDelete" >
 			<ion-item ng-repeat="item in cartProducts.Table"  item="item" href="#/item/{{item.id}}" class="item-remove-animate">
 					{{ item.ProductName }}
-					<p>Quantity : {{ item.Quantity }}</p>
+					<span class="badge badge-positive">{{ item.Quantity }}</span>
 			  <ion-delete-button class="ion-minus-circled" ng-click="onItemDelete(item)">
 			  </ion-delete-button>
 			</ion-item>
 		</ion-list>
+		<div class="list card">
+			<div class="item item-text-wrap">
+				&#8377 {{cartProducts.Table1[0].TotalAmount}}
+			</div><div class="item item-text-wrap">
+				&#8377 {{cartProducts.Table1[0].ActualMRP}}
+			</div>
+			<label class="item item-input item-floating-label">
+				<span class="input-label">Promo Code</span>
+				<input id="couponCode" type="text" placeholder="Promo Code">
+			</label>
+			<div class="item" href="#">
+				<button class="button button-block button-positive" type="submit" ng-click="checkPromoCode()">Check Promo Code</button>
+			</div>
+		</div>
     </ion-content>
 	<div class="bar bar-footer bar-balanced">
 		<a id="goToLocation" ng-click="confirmOrder()" class="button">

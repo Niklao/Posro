@@ -1,9 +1,11 @@
 angular.module('starter.storeTypesCtrl', ['ui.router'])
 
-.controller('StoreTypes', function($scope,$ionicModal,$state,$http,$rootScope,$ionicFilterBar,ionicToast,$ionicLoading) {
+.controller('StoreTypes', function($scope,$ionicModal,$state,$http,$rootScope,$ionicFilterBar,ionicToast,$ionicLoading,$ionicPopup) {
   
 	var jsonResponse ;
 	$scope.storeTypes;
+	$scope.password;
+	$scope.newPassword;
 	
 	var s0 = new Date();
 	$scope.selectedDates = [s0];
@@ -126,7 +128,7 @@ angular.module('starter.storeTypesCtrl', ['ui.router'])
 				console.log(jsonResponse);
 				$scope.hideWaiter();
 			}
-			, function errorCallback(response) {$scope.hideWaiter();ionicToast.show('Username Password don\'t match.','middle',false,2500);});
+			, function errorCallback(response) {$scope.hideWaiter();ionicToast.show('Connection Failed.','middle',false,2500);});
 	};
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////	
@@ -180,36 +182,116 @@ angular.module('starter.storeTypesCtrl', ['ui.router'])
 		$scope.historyModal = modal;
 	});
 
+	$ionicModal.fromTemplateUrl('templates/orderList.html', {
+		scope: $scope
+	}).then(function(modal) {
+		$scope.historyModal = modal;
+	});
+
+
 	$scope.showHistory = function () {
 		$scope.historyModal.show();
-		$http({method: 'POST',url: urlBase+'/getOrderHistory',data: $.param({StoreID:$rootScope.storeId}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+		$scope.showWaiter();
+		$http({method: 'POST',url: urlBase+'/GetOrderHistory',data: $.param({StoreID:'0'}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
 			function successCallback(response) {
 				var x2js = new X2JS();
 				jsonResponse = x2js.xml_str2json(response.data);
 				$scope.previousOrders =JSON.parse(jsonResponse.string.__text);
+				$scope.hideWaiter();
 			}
-			, function errorCallback(response) {alert(response);});
+			, function errorCallback(response) {scope.hideWaiter();});
+	};
+
+	$scope.getOrderHistoryList = function (id) {
+		$scope.showWaiter();
+		$http({method: 'POST',url: urlBase+'/GetOrderHistoryList',data: $.param({OrderID :id}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+			function successCallback(response) {
+				var x2js = new X2JS();
+				jsonResponse = x2js.xml_str2json(response.data);
+				$scope.previousOrders =JSON.parse(jsonResponse.string.__text);
+				$scope.hideWaiter();
+			}
+			, function errorCallback(response) {$scope.hideWaiter();});
 	};
 	
 	$scope.closeHistory = function () {
 		$scope.historyModal.hide();
 	};
 
-	$scope.openHistory = function () {
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+
+	$ionicModal.fromTemplateUrl('templates/settings.html', {
+		scope: $scope
+	}).then(function(modal) {
+		$scope.settingModal = modal;
+	});
+
+	$scope.changePassword = function () {
+		var myPopup = $ionicPopup.show({
+		template: '<label class="item item-input"><input type="password" placeholder="Old Password" id="oldPassword"></label><label class="item item-input"><input type="password" placeholder="New Password" id="newPassword"></label><label class="item item-input"><input type="password" placeholder="Confirm New Password" id="confirmNewPassword"></label>',
+		title: 'Change Password',
+		subTitle: 'Enter Old And New Password',
+		scope: $scope,
+		buttons: [
+		  	{ text: 'Cancel' },
+		  	{
+			text: '<b>Apply</b>',
+			type: 'button-positive',
+			onTap: function(e) {
+				$scope.showWaiter();
+				var oldPassword = $('#oldPassword').val();
+				var newPassword = $('#newPassword').val();
+				var confirmNewPassword = $('#confirmNewPassword').val();
+		  		if (newPassword == confirmNewPassword) {
+					$http({method: 'POST',url: urlBase+'/ChangePassword',data: $.param({NewPassword : newPassword , password : oldPassword}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+					function successCallback(response) {
+						if(jsonResponse.boolean == "true")
+						{
+							$scope.hideWaiter();
+							ionicToast.show('Password changed.','middle',false,2500);
+						}
+						else
+						{
+							$scope.hideWaiter();
+							ionicToast.show('Old Password Incorrect','middle',false,2500);
+						}
+					}
+					, function errorCallback(response) {alert(response);});
+
+			  	} else {
+			  		$scope.hideWaiter();
+					ionicToast.show('New Password don\'t match.','middle',false,2500);
+			  	}
+			}
+		}
+	]
+	});
+
+		myPopup.then(function(res) {
+			console.log('Tapped!', res);
+		});
+
+		$timeout(function() {
+			myPopup.close();
+		}, 3000);
+	};
+
+	$scope.closeSettings = function () {
+		$scope.settingModal.hide();
 	};
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	$scope.showFilterBar = function () {
-      filterBarInstance = $ionicFilterBar.show({
-        items: $scope.items,
-        update: function (filteredItems, filterText) {
-          $scope.items = filteredItems;
-          if (filterText) {
-            console.log(filterText);
-          }
-        }
-      });
+      	filterBarInstance = $ionicFilterBar.show({
+        	items: $scope.items,
+	        update: function (filteredItems, filterText) {
+	          $scope.items = filteredItems;
+	          if (filterText) {
+	            console.log(filterText);
+	          }
+	        }
+      	});
     };
 	
 	$scope.getStoreTypes();

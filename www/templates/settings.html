@@ -1,15 +1,26 @@
 <ion-modal-view>
   <ion-header-bar>
-      <div class="buttons">
-        <button class="button button-icon icon ion-ios-minus-outline"
-          ng-click="data.showDelete = !data.showDelete; data.showReorder = false"></button>
-      </div>
       <h1 class="title">Settings</h1>
 	  <div class="buttons">
       <button class="button button-clear" ng-click="closeSettings()">Close</button>
     </div>
     </ion-header-bar>
-	<ion-content>
-		
+    <ion-content>
+		  <ul class="list">
+        <li class="item item-icon-left" ng-click="changePassword()">
+          <i class="icon ion-asterisk"></i>
+          Change Password
+          <span class="item-note">
+            Change Password 
+          </span>
+        </li>
+        <li class="item item-icon-left" ng-click="showHistory()">
+          <i class="icon ion-grid"></i>
+          Order History
+          <span class="item-note">
+            See Previous Orders
+          </span>     
+        </li>
+      </ul>
     </ion-content>
 </ion-modal-view>

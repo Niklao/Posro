@@ -1,0 +1,54 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">{{currentProduct.ItemName}}</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="closeItemDetails()">Close</button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+		<div class="list card">
+			<div class="item item-avatar">
+				<img src="http://myposro.somee.com{{currentProduct.ImagePath | limitTo : 200 : 1}}">
+				<h2>{{currentProduct.ItemName}}</h2>
+				<p>Brand Name</p>
+				<p>
+					{{currentProduct.status}}
+				</p>
+				<span class="badge {{currentProduct.Status == 'Approved' ? 'badge-balanced' : ''}}">
+					{{currentProduct.Status}} <i class="icon ion-android-checkmark-circle"></i>
+				</span>
+			</div>
+			<div class="item ">
+				<h3>MRP:</h3>
+				<p>
+					<b>{{currentProduct.MRP}}</b>
+				</p>
+				<h3>Selling Price:</h3>
+				<p>
+					{{currentProduct.SellingPrice}}    			
+				</p>
+			</div>
+			<div class="item ">
+				<h3>Description:</h3>
+				<p>
+					{{currentProduct.Description}}    			
+				</p>
+			</div>
+			<div class="item item-button-right">
+				<h3>Contact Number:</h3>
+				<p>
+					{{currentProduct.ContactNum}}
+				</p>
+				<button class="button button-positive">
+					<i class="icon ion-ios-telephone" ng-href="tel:currentProduct.ContactNum"></i>
+				</button>
+			</div>
+			<div class="item ">
+				<h3>Address:</h3>
+				<p>
+					{{currentProduct.Address1}}
+				</p>
+			</div>	
+		</div>
+  </ion-content>
+</ion-modal-view>

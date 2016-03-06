@@ -81,7 +81,7 @@ angular.module('starter.productsCtrl', ['ui.router'])
 	
 	$scope.addItem = function(id){
 		$scope.addItemModal.show();
-		for (var i = 0; i <= $scope.products.Table.length ; i++) {
+		for (var i = 0; i < $scope.products.Table.length ; i++) {
 			if($scope.products.Table[i].ProductID == id)
 			{
 				$scope.currentProduct=$scope.products.Table[i];
@@ -382,7 +382,7 @@ angular.module('starter.productsCtrl', ['ui.router'])
   	$scope.storeName="Pasro";
   
   	// $scope.$on($viewContentLoaded, function() {
-    	$scope.getSpecialOfferAndgetCategory();
+	$scope.getSpecialOfferAndgetCategory();
   	// });
   	
 });

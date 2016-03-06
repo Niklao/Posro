@@ -1,0 +1,19 @@
+<ion-view view-title="{{title}}">
+	<ion-content>
+		<ul class="list">
+			<li class="item item-thumbnail-left" ng-repeat="service in services.Table"  ng-click="showServiceDetails({{service.SPID}})">
+				<img src="http://myposro.somee.com{{service.ImagePath | limitTo : 200 : 1}}">
+				<h2>{{service.Name}}</h2>
+				<p>{{service.CategoryName}}</p>
+				<p>Experience:{{service.Experience}}</p>
+			</li>
+		</ul>
+	</ion-content>
+	<div class="bar bar-footer bar-balanced">
+		<div class="button-bar">
+			<button class="button icon ion-plus-round" ng-click="showBuyNSell()">
+				Add
+			</button>
+		</div>
+	</div>
+</ion-view>

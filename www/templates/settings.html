@@ -6,21 +6,31 @@
     </div>
     </ion-header-bar>
     <ion-content>
-		  <ul class="list">
-        <li class="item item-icon-left" ng-click="changePassword()">
-          <i class="icon ion-asterisk"></i>
-          Change Password
-          <span class="item-note">
-            Change Password 
-          </span>
-        </li>
-        <li class="item item-icon-left" ng-click="showHistory()">
-          <i class="icon ion-grid"></i>
-          Order History
-          <span class="item-note">
-            See Previous Orders
-          </span>     
-        </li>
-      </ul>
+		<ul class="list">
+			<li class="item item-icon-left" ng-click="changePassword()">
+			  <i class="icon ion-asterisk"></i>
+			  Change Password
+			  <span class="item-note">
+				Change Password 
+			  </span>
+			</li>
+			<li class="item item-icon-left" ng-click="showHistory()">
+			  <i class="icon ion-grid"></i>
+			  Order History
+			  <span class="item-note">
+				See Previous Orders
+			  </span>     
+			</li>
+			<li class="item item-toggle item-icon-left">
+				<i class="icon ion-android-cancel"></i>
+				Do Not Notify Me
+				<label class="toggle toggle-assertive">
+					<input type="checkbox">
+					<div class="track">
+						<div class="handle"></div>
+					</div>
+				</label>
+			</li>
+		</ul>
     </ion-content>
 </ion-modal-view>

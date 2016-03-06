@@ -1,0 +1,16 @@
+<ion-modal-view>
+	<ion-header-bar>
+		<h1 class="title">Your Buy N Sell</h1>
+		<div class="buttons">
+			<button class="button button-clear" ng-click="closeCutomerBuyNSell()">Close</button>
+		</div>
+    </ion-header-bar>
+	<ion-content>
+	      <ion-list show-delete="data.showDelete" >
+			<ion-item ng-repeat="item in cartProducts.Table"  item="item" href="#/item/{{item.id}}" class="item-remove-animate">
+					{{ item.ProductName }}
+					<span class="badge badge-positive">{{ item.Quantity }}</span>
+			</ion-item>
+		</ion-list>
+    </ion-content>
+</ion-modal-view>

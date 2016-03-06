@@ -1,0 +1,49 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">{{currentService.Name}}</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="closeServiceDetails()">Close</button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+		<div class="list card">
+			<div class="item item-avatar">
+				<img src="http://myposro.somee.com{{currentService.ImagePath | limitTo : 200 : 1}}">
+				<h2>{{currentService.Name}}</h2>
+				<p>
+					{{currentService.CategoryName}}
+				</p>
+				<span class="badge badge-balanced">
+					{{currentService.Status}} <i class="icon ion-android-checkmark-circle"></i>
+				</span>
+			</div>
+			<div class="item ">
+				<h3>Experience</h3>
+				<p>
+					<b>{{currentService.Experience}}</b>
+				</p>
+			</div>
+			<div class="item ">
+				<h3>Description:</h3>
+				<p>
+					{{currentService.Description}}    			
+				</p>
+			</div>
+			<div class="item item-button-right">
+				<h3>Contact Number:</h3>
+				<p>
+					{{currentService.ContactNum}}
+				</p>
+				<button class="button button-positive">
+					<i class="icon ion-ios-telephone" ng-href="tel:currentService.ContactNum"></i>
+				</button>
+			</div>
+			<div class="item ">
+				<h3>Address:</h3>
+				<p>
+					{{currentService.Address1}}
+				</p>
+			</div>	
+		</div>
+  </ion-content>
+</ion-modal-view>

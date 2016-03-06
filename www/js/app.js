@@ -8,7 +8,7 @@
 // var urlBase='http://myposro.somee.com/webservice/MyPosroWebservice.asmx';
 var urlBase='http://myposro1.somee.com/webservice1.asmx';
 
-angular.module('starter', ['ionic','starter.productsCtrl','starter.homeCtrl','starter.storesCtrl','starter.storeTypesCtrl','starter.locationCtrl','jett.ionic.filter.bar','ionic-toast','ngFileUpload','ionic-timepicker', 'ionic-multi-date-picker'])
+angular.module('starter', ['ionic','starter.productsCtrl','starter.homeCtrl','starter.storesCtrl','starter.storeTypesCtrl','starter.locationCtrl','starter.buyNSellCtrl','starter.servicesCtrl','jett.ionic.filter.bar','ionic-toast','ngFileUpload','ionic-timepicker', 'ionic-multi-date-picker'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -27,65 +27,88 @@ angular.module('starter', ['ionic','starter.productsCtrl','starter.homeCtrl','st
 })
 
 .config(function($stateProvider, $urlRouterProvider) {
-  $stateProvider
+	$stateProvider
 
     .state('home', {
-    url: '/home',
-	cache: false ,
-    templateUrl: 'templates/home.html',
-    controller: 'HomeCtrl'
-  })
+		url: '/home',
+		cache: false ,
+		templateUrl: 'templates/home.html',
+		controller: 'HomeCtrl'
+	})
 
     .state('location', {
-    url: '/location',
-	cache: false ,
-    templateUrl: 'templates/location.html',
-    controller: 'LocationCtrl'
-  })
+		url: '/location',
+		cache: false ,
+		templateUrl: 'templates/location.html',
+		controller: 'LocationCtrl'
+	})
   
     .state('storeTypes', {
-    url: '/storetypes',
-	cache: false ,
-    templateUrl: 'templates/storeTypes.html',
-    controller: 'StoreTypes'
-  })
+		url: '/storetypes',
+		cache: false ,
+		templateUrl: 'templates/storeTypes.html',
+		controller: 'StoreTypes'
+	})
   
-  .state('stores', {
-    url: '/stores',
-	cache: false ,
-    templateUrl: 'templates/stores.html',
-    controller: 'Stores'
-  })
+	.state('stores', {
+		url: '/stores',
+		cache: false ,
+		templateUrl: 'templates/stores.html',
+		controller: 'Stores'
+	})
 
-    .state('app', {
-    url: '/app',
-    abstract: true,
-    templateUrl: 'templates/menu.html',
-    controller: 'ProductsCtrl'
-  })
+    .state('product', {
+		url: '/product',
+		abstract: true,
+		templateUrl: 'templates/productMenu.html',
+		controller: 'ProductsCtrl'
+	})
 
-  .state('app.search', {
-    url: '/search',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/search.html'
-      }
-    }
-  })
+	.state('product.products', {
+		url: '/products',
+		views: {
+		  'menuContent': {
+			templateUrl: 'templates/products.html',
+			controller: 'ProductsCtrl'
+		  }
+		}
+	})
+	
+	.state('buynsell', {
+		url: '/buynsell',
+		abstract: true,
+		templateUrl: 'templates/buyNSellMenu.html',
+		controller: 'BuyNSellCtrl'
+	})
 
-  .state('app.products', {
-    url: '/products',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/products.html',
-        controller: 'ProductsCtrl'
-      }
-    }
-  })
+	.state('buynsell.buynsells', {
+		url: '/buynsells',
+		views: {
+		  'menuContent': {
+			templateUrl: 'templates/buyNSells.html',
+			controller: 'BuyNSellCtrl'
+		  }
+		}
+	})
+	
+	.state('service', {
+		url: '/service',
+		abstract: true,
+		templateUrl: 'templates/serviceMenu.html',
+		controller: 'ServicesCtrl'
+	})
 
- 
-  // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/home');
+	.state('service.services', {
+		url: '/services',
+		views: {
+		  'menuContent': {
+			templateUrl: 'templates/service.html',
+			controller: 'ServicesCtrl'
+		  }
+		}
+	})
+
+	$urlRouterProvider.otherwise('/home');
 })
 
  .directive('standardTimeNoMeridian', function () {

@@ -1,0 +1,61 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">New Buy N Sell</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="closeBuyNSell()">Close</button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+    <h4 class="padding">Make Your Classified...</h4>
+    <form ng-submit="saveBuyNSell()">
+      <div class="list">
+        <label class="item item-input item-floating-label">
+          <span class="input-label">Item Name</span>
+          <input type="text" id="itemName" placeholder="Item Name">
+        </label>
+		<label class="item item-input item-select">
+			<div class="input-label">
+			Categories
+			</div>
+			<select id="categoryID">
+			  <option ng-repeat="category in jsonResponse.Table" value="{{category.CategoryID}}">{{category.CategoryName}}</option>
+			</select>
+		</label>
+        <label class="item item-input item-floating-label">
+          <span class="input-label">Location Name</span>
+          <input type="text" id="locationName" placeholder="Location Name">
+        </label>
+        <label class="item item-input item-floating-label">
+          <span class="input-label">Description</span>
+          <textarea type="text" id="description" placeholder="Description"></textarea>
+        </label>
+        <label class="item item-input item-floating-label">
+          <span class="input-label">Selling Price</span>
+          <input type="text"id="sellingPrice" placeholder="Selling Price">
+        </label>
+		<label class="item item-input item-floating-label">
+          <span class="input-label">MRP</span>
+          <input type="text"id="mrp" placeholder="MRP">
+        </label>
+        <label class="item item-input item-floating-label">
+          <span class="input-label">Contact Number</span>
+          <input type="text" id="contactnum1" placeholder="Contact Number">
+        </label>
+        <label class="item item-input item-floating-label">
+          <span class="input-label">Usage</span>
+          <input type="text" id="usage" placeholder="Usage">
+        </label>
+		<div class="item item-button-left item-thumbnail-right">
+			<button class="button button-positive" ng-click="itemPhoto()">
+				<i class="icon ion-camera"></i>
+				Take Item Photo
+			</button>
+			<img src="{{itemImage}}">
+		</div>
+        <button class="button button-block button-positive" ">
+          Submit
+        </button>
+      </div>
+    </form>
+  </ion-content>
+</ion-modal-view>

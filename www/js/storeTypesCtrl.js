@@ -113,7 +113,7 @@ angular.module('starter.storeTypesCtrl', ['ui.router'])
 	
 	$scope.goToStore = function(ID){
 		$rootScope.storeId = ID;
-		$state.go('app.products');
+		$state.go('product.products');
 	};
 	
 	$("body").on('keyup', '.filter-bar-search', $scope.searchProductInLocation );	
@@ -171,7 +171,7 @@ angular.module('starter.storeTypesCtrl', ['ui.router'])
 	{
 		$scope.closeStores();
 		$rootScope.storeId = ID;
-		$state.go('app.products');	
+		$state.go('product.products');	
 	};
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////
@@ -256,7 +256,7 @@ angular.module('starter.storeTypesCtrl', ['ui.router'])
 							ionicToast.show('Old Password Incorrect','middle',false,2500);
 						}
 					}
-					, function errorCallback(response) {alert(response);});
+					, function errorCallback(response) {$scope.hideWaiter();ionicToast.show('Excuse,System side Error.','middle',false,2500);});
 
 			  	} else {
 			  		$scope.hideWaiter();
@@ -280,6 +280,20 @@ angular.module('starter.storeTypesCtrl', ['ui.router'])
 		$scope.settingModal.hide();
 	};
 
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	$scope.goToBuyNSell = function(ID)
+	{
+		$state.go('buynsell.buynsells');	
+	};
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	$scope.goToServices = function(ID)
+	{
+		$state.go('service.services');	
+	};
+	
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	$scope.showFilterBar = function () {

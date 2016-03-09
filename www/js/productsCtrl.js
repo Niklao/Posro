@@ -6,7 +6,7 @@ angular.module('starter.productsCtrl', ['ui.router'])
 	$scope.currentProduct;
 	$scope.data = {showDelete: false};
 	$scope.cartProducts;
-	$scope.products;
+	$rootScope.storeProducts;
 	
 	$scope.showWaiter = function() {
         $ionicLoading.show({
@@ -81,10 +81,10 @@ angular.module('starter.productsCtrl', ['ui.router'])
 	
 	$scope.addItem = function(id){
 		$scope.addItemModal.show();
-		for (var i = 0; i < $scope.products.Table.length ; i++) {
-			if($scope.products.Table[i].ProductID == id)
+		for (var i = 0; i < $rootScope.storeProducts.Table.length ; i++) {
+			if($rootScope.storeProducts.Table[i].ProductID == id)
 			{
-				$scope.currentProduct=$scope.products.Table[i];
+				$scope.currentProduct=$rootScope.storeProducts.Table[i];
 				console.log($scope.currentProduct);
 			}
 		}
@@ -137,7 +137,7 @@ angular.module('starter.productsCtrl', ['ui.router'])
 	};
 
 	$scope.getOrderHistoryList = function (id) {
-		scope.showWaiter();
+		$scope.showWaiter();
 		$http({method: 'POST',url: urlBase+'/GetOrderHistoryList',data: $.param({OrderID :ID}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
 			function successCallback(response) {
 				var x2js = new X2JS();
@@ -174,7 +174,7 @@ angular.module('starter.productsCtrl', ['ui.router'])
 			function successCallback(response) {
 				var x2js = new X2JS();
 				jsonResponse = x2js.xml_str2json(response.data);
-				$scope.products =JSON.parse(jsonResponse.string.__text);
+				$rootScope.storeProducts =JSON.parse(jsonResponse.string.__text);
 			}
 			, function errorCallback(response) {alert(response);});
 		}
@@ -211,16 +211,15 @@ angular.module('starter.productsCtrl', ['ui.router'])
 	};
 	
 	$scope.getProductForCategory = function (ID){
+		$scope.showWaiter();
 		$http({method: 'POST',url: urlBase+'/GetProductforCategory',data: $.param({StoreID: $rootScope.storeId, CategoryID: ID,}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
 			function successCallback(response) {
-				$scope.products='';
 				var x2js = new X2JS();
-				var jsonResponse;
 				jsonResponse = x2js.xml_str2json(response.data);
-				$scope.products = JSON.parse(jsonResponse.string.__text);
-				console.log($scope.products);
+				$rootScope.storeProducts =JSON.parse(jsonResponse.string.__text);
+				$scope.hideWaiter();
 			}
-			, function errorCallback(response) {alert(response);});
+			, function errorCallback(response) {$scope.hideWaiter();});
 	};
 	
 	$scope.searchCategory();
@@ -235,8 +234,8 @@ angular.module('starter.productsCtrl', ['ui.router'])
 		function successCallback(response) {
 			var x2js = new X2JS();
 			jsonResponse = x2js.xml_str2json(response.data);
-			$scope.products =JSON.parse(jsonResponse.string.__text);
-			console.log($scope.products.Table);
+			$rootScope.storeProducts =JSON.parse(jsonResponse.string.__text);
+			console.log($rootScope.storeProducts.Table);
 		}
 		, function errorCallback(response) {ionicToast.show('Load Failed.','middle',false,2500);});
 		
@@ -296,7 +295,7 @@ angular.module('starter.productsCtrl', ['ui.router'])
 			var x2js = new X2JS();
 			jsonResponse = x2js.xml_str2json(response.data);
 			$scope.cartProducts =JSON.parse(jsonResponse.string.__text);
-			console.log($scope.products.Table);
+			console.log($rootScope.storeProducts.Table);
 		}
 		, function errorCallback(response) {alert(response);});
 		$scope.checkoutModal.show();
@@ -312,7 +311,7 @@ angular.module('starter.productsCtrl', ['ui.router'])
 				var x2js = new X2JS();
 				jsonResponse = x2js.xml_str2json(response.data);
 				$scope.offerStatus =JSON.parse(jsonResponse.string.__text);
-				console.log($scope.products.Table);
+				console.log($rootScope.storeProducts.Table);
 			}
 		, function errorCallback(response) {alert(response);});
 	};
@@ -324,7 +323,7 @@ angular.module('starter.productsCtrl', ['ui.router'])
 			var x2js = new X2JS();
 			jsonResponse = x2js.xml_str2json(response.data);
 			$scope.cartProducts =JSON.parse(jsonResponse.string.__text);
-			console.log($scope.products.Table);
+			console.log($rootScope.storeProducts.Table);
 			ionicToast.show('Order Placed', 'top', true, 2500);
 		}
 		, function errorCallback(response) {alert(response);});
@@ -336,7 +335,7 @@ angular.module('starter.productsCtrl', ['ui.router'])
 			var x2js = new X2JS();
 			jsonResponse = x2js.xml_str2json(response.data);
 			$scope.cartProducts =JSON.parse(jsonResponse.string.__text);
-			console.log($scope.products.Table);
+			console.log($rootScope.storeProducts.Table);
 		}
 		, function errorCallback(response) {alert(response);});
 		$scope.cartProducts.Table.splice($scope.cartProducts.Table.indexOf(item), 1);

@@ -12,6 +12,21 @@
 				<span class="input-label">Event Title</span>
 				<input id="eventTitle" type="text" placeholder="Panchayat Meeting">
 			</label>
+			 <label class="item item-input item-select">
+    			<div class="input-label">
+      				Event type
+    			</div>
+			    <select id="categoryID">
+			    	<option ng-repeat="category in meetAndEventsCategory.Table" value="{{category.CategoryID}}">{{category.CategoryName}}</option>
+			    </select>	
+			</label><label class="item item-input item-select">
+    			<div class="input-label">
+      				Location
+    			</div>
+			    <select id="locationID">
+			    	<option ng-repeat="location in locations.Table" value="{{location.LocationID}}">{{location.LocationName}}</option>
+			    </select>	
+			</label>
 			<label class="item item-input item-floating-label">
 				<span class="input-label">Conveyed By</span>
 				<input id="conveyedBy" type="text" placeholder="For">

@@ -1,11 +1,12 @@
 angular.module('starter.storeTypesCtrl', ['ui.router'])
 
-.controller('StoreTypes', function($scope,$ionicModal,$state,$http,$rootScope,$ionicFilterBar,ionicToast,$ionicLoading,$ionicPopup) {
+.controller('StoreTypes', function($scope,$ionicModal,$state,$http,$rootScope,$ionicFilterBar,ionicToast,$ionicLoading,$ionicPopup,httpManager,loadManager) {
   
 	var jsonResponse ;
 	$scope.storeTypes;
 	$scope.password;
 	$scope.newPassword;
+	$scope.meetAndEvents;
 	
 	var s0 = new Date();
 	$scope.selectedDates = [s0];
@@ -282,18 +283,40 @@ angular.module('starter.storeTypesCtrl', ['ui.router'])
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	$scope.goToBuyNSell = function(ID)
+	$scope.goToBuyNSell = function()
 	{
 		$state.go('buynsell.buynsells');	
 	};
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	$scope.goToServices = function(ID)
+	$scope.goToServices = function()
 	{
 		$state.go('service.services');	
 	};
 	
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+
+	$ionicModal.fromTemplateUrl('templates/meetAndEvents.html', {
+		scope: $scope
+	}).then(function(modal) {
+		$scope.meetAndEventsModal = modal;
+	});
+
+	$scope.getMeetAndEventsSuccessCallback = function(response)
+	{
+		var jsonResponse = httpManager.jsonParser(response);
+		$scope.meetAndEvents = JSON.parse(jsonResponse.string.__text);
+		loadManager.hideWaiter();	
+	}
+
+	$scope.goToMeetNEvents = function()
+	{
+		loadManager.showWaiter();
+		$scope.meetAndEventsModal.show();
+		httpManager.postRequester('GetOthers',{CategoryID: '0',StoreTypeID: '300'},$scope.getMeetAndEventsSuccessCallback);
+	};
+
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	$scope.showFilterBar = function () {

@@ -1,22 +1,12 @@
 angular.module('starter.productsCtrl', ['ui.router'])
 
-.controller('ProductsCtrl', function($scope,$ionicModal,$http,$rootScope,$ionicFilterBar,Upload,$ionicPopup,ionicToast,$ionicLoading) {
+.controller('ProductsCtrl', function($scope,$ionicModal,$http,$rootScope,$ionicFilterBar,Upload,$ionicPopup,ionicToast,$ionicLoading,loadManager) {
 
 	$scope.jsonResponse;
 	$scope.currentProduct;
 	$scope.data = {showDelete: false};
 	$scope.cartProducts;
 	$rootScope.storeProducts;
-	
-	$scope.showWaiter = function() {
-        $ionicLoading.show({
-          template: 'Loading...'
-        });
-	};
-      
-	$scope.hideWaiter = function(){
-		$ionicLoading.hide();
-	};
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -51,24 +41,24 @@ angular.module('starter.productsCtrl', ['ui.router'])
 	};
 
 	$scope.sendFeedback = function (){
-		$scope.showWaiter();
+		loadManager.showWaiter();
 		$http({method: 'POST',url: urlBase+'/SaveSuggestion',data: $.param({Suggestion:$('#suggestion').html()}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
 		function successCallback(response) {
 			var x2js = new X2JS();
 			jsonResponse = x2js.xml_str2json(response.data);
 			if(jsonResponse.boolean == "true")
 			{
-				$scope.hideWaiter();
+				loadManager.hideWaiter();
 				$scope.feedbackModal.hide();
 				ionicToast.show('Feedback Saved', 'top', true, 2500);
 			}
 			else
 			{
-				$scope.hideWaiter();
+				loadManager.hideWaiter();
 				ionicToast.show('Activity Failed','middle',false,2500);
 			}
 		}
-		, function errorCallback(response) {$scope.hideWaiter();ionicToast.show('Activity Failed', 'top', true, 2500);});
+		, function errorCallback(response) {loadManager.hideWaiter();ionicToast.show('Activity Failed', 'top', true, 2500);});
 	};
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////
@@ -125,7 +115,7 @@ angular.module('starter.productsCtrl', ['ui.router'])
 
 	$scope.showHistory = function () {
 		$scope.historyModal.show();
-		$scope.showWaiter();
+		loadManager.showWaiter();
 		$http({method: 'POST',url: urlBase+'/GetOrderHistory',data: $.param({StoreID:$rootScope.storeId}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
 			function successCallback(response) {
 				var x2js = new X2JS();
@@ -137,7 +127,7 @@ angular.module('starter.productsCtrl', ['ui.router'])
 	};
 
 	$scope.getOrderHistoryList = function (id) {
-		$scope.showWaiter();
+		loadManager.showWaiter();
 		$http({method: 'POST',url: urlBase+'/GetOrderHistoryList',data: $.param({OrderID :ID}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
 			function successCallback(response) {
 				var x2js = new X2JS();
@@ -211,15 +201,15 @@ angular.module('starter.productsCtrl', ['ui.router'])
 	};
 	
 	$scope.getProductForCategory = function (ID){
-		$scope.showWaiter();
+		loadManager.showWaiter();
 		$http({method: 'POST',url: urlBase+'/GetProductforCategory',data: $.param({StoreID: $rootScope.storeId, CategoryID: ID,}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
 			function successCallback(response) {
 				var x2js = new X2JS();
 				jsonResponse = x2js.xml_str2json(response.data);
-				$rootScope.storeProducts =JSON.parse(jsonResponse.string.__text);
-				$scope.hideWaiter();
+				$rootScope.storeProducts =JSON.parse(jsonResponse.string.__text.replace('/n',' 	'));
+				loadManager.hideWaiter();
 			}
-			, function errorCallback(response) {$scope.hideWaiter();});
+			, function errorCallback(response) {loadManager.hideWaiter();});
 	};
 	
 	$scope.searchCategory();
@@ -229,7 +219,7 @@ angular.module('starter.productsCtrl', ['ui.router'])
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	$scope.getSpecialOfferAndgetCategory = function (){
-		$scope.showWaiter();
+		loadManager.showWaiter();
 		$http({method: 'POST',url: urlBase+'/GetSpecialOffers',data: $.param({StoreID : $rootScope.storeId }),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
 		function successCallback(response) {
 			var x2js = new X2JS();
@@ -245,7 +235,7 @@ angular.module('starter.productsCtrl', ['ui.router'])
 			var jsonResponse;
 			jsonResponse = x2js.xml_str2json(response.data);
 			$scope.jsonResponse = JSON.parse(jsonResponse.string.__text);
-			$scope.hideWaiter();
+			loadManager.hideWaiter();
 		}
 		, function errorCallback(response) {ionicToast.show('Load Failed.','middle',false,2500);});
 	};
@@ -353,13 +343,13 @@ angular.module('starter.productsCtrl', ['ui.router'])
 						jsonResponse = x2js.xml_str2json(response.data);
 						if(jsonResponse.boolean == "true")
 						{
-							$scope.hideWaiter();
+							loadManager.hideWaiter();
 							ionicToast.show('Uploaded','middle',false,2500);
 							$scope.modal.hide();
 						}
 						else
 						{
-							$scope.hideWaiter();
+							loadManager.hideWaiter();
 							ionicToast.show('Upload failed','middle',false,2500);
 						}
 					}

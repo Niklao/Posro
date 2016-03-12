@@ -1,0 +1,48 @@
+<ion-modal-view>
+  <ion-header-bar>
+      <h1 class="title icon ion-person-stalker"> Meet And Events</h1>
+	  <div class="buttons">
+      <button class="button button-clear" ng-click="meetAndEventsModal.hide()">Close</button>
+    </div>
+    </ion-header-bar>
+	<ion-content>
+		<h4 class="text-center" style="margin-top:10px;"></h4>
+		<div class="list">
+			<label class="item item-input item-floating-label">
+				<span class="input-label">Event Title</span>
+				<input id="eventTitle" type="text" placeholder="Panchayat Meeting">
+			</label>
+			<label class="item item-input item-floating-label">
+				<span class="input-label">Conveyed By</span>
+				<input id="conveyedBy" type="text" placeholder="For">
+			</label>
+			<label class="item item-input item-floating-label">
+				<span class="input-label">Description</span>
+				<textarea id="description" placeholder="Description"></textarea>
+			</label>
+			<label class="item item-input item-floating-label">
+				<span class="input-label">Venue</span>
+				<textarea id="venue" placeholder="Address"></textarea>
+			</label>
+			<label class="item item-input item-floating-label">
+				<span class="input-label">Contact</span>
+				<input id="contactNo1" type="tel">
+			</label>
+		</div>
+		<ionic-multi-date-picker input-obj="birthDatepickerObjectNeo">
+			<button class="button button-block button-balanced ng-binding icon-left ion-calendar">
+				{{ selectedDates[0] | date:dateFormat}}
+			</button>
+		</ionic-multi-date-picker>
+		<ionic-timepicker input-obj="timePickerObject24HourBirth">
+  			<button class="button button-block button-balanced overflowShow icon-left ion-clock">
+    			<standard-time-no-meridian id="t_atBirth" etime='timePickerObject24HourBirth.inputEpochTime'></standard-time-no-meridian>
+  			</button>
+		</ionic-timepicker>
+		<div class="item item-text-wrap">
+			<button class="button button-balanced button-block" ng-click="sendMeetAndEvents()">
+				Submit
+			</button>
+		</div>
+    </ion-content>
+</ion-modal-view>

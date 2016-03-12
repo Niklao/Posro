@@ -181,7 +181,7 @@ angular.module('starter.buyNSellCtrl', ['ui.router'])
 
 	$scope.showCustomerBuyNSell = function (){
 		$scope.customerBuyNSellModal.show();
-		$http({method: 'POST',url: urlBase+'/gGetCustomerPostedBuyNsellet',data: $.param({ID:'0',categoryID: $('#categoryID').val() ,itemname: $('#itemName').val(),locationName:$('#locationName').val(),description:$('#description').val(),sellingPrice:$('#sellingPrice').val(),mrp:$('#mrp').val(),contactnum1:$('#contactnum1').val(),itemage:$('#usage').val(),ImageString:$scope.itemImage}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+		$http({method: 'POST',url: urlBase+'/GetCustomerPostedBuyNsell',data: $.param({CustomeID:'0'}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
 		function successCallback(response) {
 			var x2js = new X2JS();
 			jsonResponse = x2js.xml_str2json(response.data);

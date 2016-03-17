@@ -1,3 +1,11 @@
-  .notNeeded{
-    display:none !important;
-  }
+.notNeeded{
+	display:none !important;
+}
+
+.buttonFix{
+	color:#dadada !important;
+}
+
+.buttonFix:hover{
+	color:white !important;
+}

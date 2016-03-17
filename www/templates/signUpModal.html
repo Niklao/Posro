@@ -1,58 +1,63 @@
 <ion-modal-view>
   <ion-header-bar>
     <h1 class="title">Sign Up</h1>
-    <div class="buttons">
-      <button class="button button-clear" ng-click="signUpModal.hide();">Close</button>
+    <div class="buttons buttons-right header-item">
+        <span class="right-buttons">
+          <button class="button button-clear button-assertive icon ion-android-cancel buttonFix" ng-click="signUpModal.hide();"></button>
+        </span>
     </div>
   </ion-header-bar>
   <ion-content>
-    <h4 class="padding">Give Us A Moment To Make You part Of Us...</h4>
-    <form ng-submit="doSignUp()">
-      <div class="list">
-        <label class="item item-input item-floating-label">
-          <span class="input-label">Username</span>
-          <input type="text" id="username" placeholder="Username">
-        </label>
-        <label class="item item-input item-floating-label">
-          <span class="input-label">Password</span>
-          <input type="text" id="password" placeholder="Password">
-        </label>
-        <label class="item item-input item-floating-label">
-          <span class="input-label">Repeat Password</span>
-          <input type="text" id="confirmPassword" placeholder="Repeat Password">
-        </label>
-        <label class="item item-input item-floating-label">
-          <span class="input-label">Address</span>
-          <input type="text"id="address" placeholder="Address">
-        </label>
-        <label class="item item-input item-floating-label">
-          <span class="input-label">Landmark</span>
-          <input type="text" id="landmark" placeholder="Landmark">
-        </label>
-        <label class="item item-input item-floating-label">
-          <span class="input-label">Contact Num 1</span>
-          <input type="text" id="contactnum1" placeholder="Contact Num 1">
-        </label>
-        <label class="item item-input item-floating-label">
-          <span class="input-label">Contact Num 2</span>
-          <input type="text" id="contactnum2" placeholder="Contact Num 2">
-        </label>
-        <label class="item item-input item-floating-label">
-          <span class="input-label">Email</span>
-          <input type="text" id="email" placeholder="Email">
-        </label>
-        <label class="item item-input item-select">
-          <div class="input-label">
-            Location
-          </div>
-          <select id='location'>
-            <option ng-repeat="location in locations.Table" value="{{location.LocationID}}">{{location.LocationName}},{{location.TalukaName}} </option>
-          </select>
-        </label>
-        <button class="button button-block button-positive">
-          Submit
-        </button>
-      </div>
-    </form>
+    <div class="im-wrapper">
+      <h4 class="">Give Us A Moment To Make You part Of Us...</h4>
+      <form ng-submit="doSignUp()">
+        <div class="list">
+          <label class="item item-input item-floating-label">
+            <span class="input-label">Username</span>
+            <input type="text" id="username" placeholder="Username">
+          </label>
+          <label class="item item-input item-floating-label">
+            <span class="input-label">Password</span>
+            <input type="password" id="password" placeholder="Password">
+          </label>
+          <label class="item item-input item-floating-label">
+            <span class="input-label">Repeat Password</span>
+            <input type="password" id="confirmPassword" placeholder="Repeat Password">
+          </label>
+          <label class="item item-input item-floating-label">
+            <span class="input-label">Address</span>
+            <input type="text"id="address" placeholder="Address">
+          </label>
+          <label class="item item-input item-floating-label">
+            <span class="input-label">Landmark</span>
+            <input type="text" id="landmark" placeholder="Landmark">
+          </label>
+          <label class="item item-input item-floating-label">
+            <span class="input-label">Contact Num 1</span>
+            <input type="number" id="contactnum1" placeholder="Contact Num 1">
+          </label>
+          <label class="item item-input item-floating-label">
+            <span class="input-label">Contact Num 2</span>
+            <input type="number" id="contactnum2" placeholder="Contact Num 2 (Optional)">
+          </label>
+          <label class="item item-input item-floating-label">
+            <span class="input-label">Email</span>
+            <input type="text" id="email" placeholder="Email">
+          </label>
+          <br></br>
+          <label class="item item-input item-select">
+            <div class="input-label">
+              Location
+            </div>
+            <select id='location'>
+              <option ng-repeat="location in locations.Table" value="{{location.LocationID}}">{{location.LocationName}},{{location.TalukaName}} </option>
+            </select>
+          </label>
+          <button class="button button-block button-positive">
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
   </ion-content>
 </ion-modal-view>

@@ -1,8 +1,12 @@
 <ion-pane>
-	<ion-header-bar>
-		<h1 class="title">Store Types</h1>
-		<button class="button button-icon icon ion-ios-search-strong" ng-click="showFilterBar()">
-		</button>
+	<ion-header-bar class="bar bar-header">
+		<div class="h1 title">Store Types</div>
+		<div class="buttons buttons-right header-item">
+            <span class="right-buttons">
+				<button class="button icon ion-ios-search-strong button-balanced button-fab" ng-click="showFilterBar()">
+				</button>
+            </span>
+		</div>
 	</ion-header-bar>
 	<ion-content>
 		<div class="row">
@@ -48,9 +52,13 @@
             </div>
 		</div>
 	</ion-content>
-	<div class="bar bar-footer bar-positive">
-		<button class="button icon pull-right ion-gear-a" ng-click="settingModal.show()">
-		</button>
+	<div class="bar bar-footer bar-assertive">
+		<div class="title">
+		</div>
+		<div clas="buttons buttons-right">
+			<button class="button button-flat icon ion-gear-a button-assertive" ng-click="settingModal.show()">
+			</button>
+		</div>
 	</div>
 </ion-pane>
 

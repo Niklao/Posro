@@ -1,37 +1,40 @@
 <ion-modal-view>
-  <ion-header-bar>
-    <h1 class="title">Login</h1>
-    <div class="buttons">
-      <button class="button button-clear" ng-click="loginModal.hide()">Close</button>
-    </div>
-  </ion-header-bar>
-  <ion-content>
-    <form ng-submit="doLogin()">
-      <div class="list">
-        <label class="item item-input">
-          <span class="input-label">Username</span>
-          <input type="text" id="userName">
-        </label>
-        <label class="item item-input">
-          <span class="input-label">Password</span>
-          <input type="password" id="passWord">
-        </label>
-        <label class="item">
-          <button class="button button-block button-positive" type="submit" ng-click="userLogin()" >Log in</button>
-        </label>
-      </div>
-    </form>
-    <button class="button button-clear button-positive">
-      Can't Login ???
-    </button>
-	<div class="card">
-		<div class="item item-text-wrap">
-			<button class="button button-balanced button-block" ng-click="showSignUp()">
-				Sign Up
-			</button>
-		</div>
-	</div>
-  </ion-content>
+    <ion-header-bar>
+        <h1 class="title">Login</h1>
+        <div class="buttons buttons-right header-item">
+            <span class="right-buttons">
+                <button class="button button-clear button-assertive icon ion-android-cancel buttonFix" ng-click="loginModal.hide()"></button>
+            </span>
+        </div>
+    </ion-header-bar>
+    <ion-content>
+        <div class="im-wrapper">
+            <form ng-submit="doLogin()">
+                <div class="list">
+                    <label class="item item-input item-floating-label">
+                        <span class="input-label">Username</span>
+                        <input type="text" id="userName" placeholder="Username">
+                    </label>
+                    <label class="item item-input item-floating-label">
+                        <span class="input-label">Password</span>
+                        <input type="password" id="passWord" placeholder="Password">
+                    </label>
+                    <button class="button button-full button-positive ink" type="submit" ng-click="userLogin()" >Log in</button>
+                </div>
+            </form>
+            <button class="button button-clear button-positive">
+                Can't Login ???
+            </button>
+            <div class="card">
+                <h4 class="padding-top padding-horizontal">Oh You Are New Here???</h4>
+                <div class="item item-text-wrap">
+                    <button class="button button-assertive button-block button-raised" ng-click="showSignUp()">
+				        Sign Up
+			         </button>
+                </div>
+            </div>
+        </div>
+    </ion-content>
   <!--
   <div class="bar bar-footer bar-balanced">
     <a id="goToLocation" href="#/location" ng-click="closeLogin()" class="button icon-right ion-chevron-right pull-right">

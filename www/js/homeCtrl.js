@@ -39,40 +39,38 @@ angular.module('starter.homeCtrl', ['ui.router'])
 		loadManager.showWaiter();
 		httpManager.postRequester('UserLogin',{_UserName: $('#userName').val() ,_Password: $('#passWord').val()},$scope.userLoginSuccessCallback);
 	};
+
+	$scope.showSignUpCallback = function (response){
+		jsonResponse = httpManager.jsonParser(response);
+		$scope.locations =JSON.parse(jsonResponse.string.__text);
+		loadManager.hideWaiter();
+	};
   	
   	$scope.showSignUp = function() {
 		loadManager.showWaiter();
-		$http({method: 'POST',url: urlBase+'/GetLocation',data: $.param({TalukaID: '0'}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
-		function successCallback(response) {
-			var x2js = new X2JS();
-			jsonResponse = x2js.xml_str2json(response.data);
-			$scope.locations =JSON.parse(jsonResponse.string.__text);
-			loadManager.hideWaiter();
-		}
-		, function errorCallback(response) {ionicToast.show('Couldn\'t Connect','middle',false,2500);loadManager.hideWaiter();});
+		httpManager.postRequester('GetLocation',{TalukaID: '0'},$scope.showSignUpCallback);
 		$scope.signUpModal.show();
+	};
+
+	$scope.doSignUpSuccessCallback = function (response){
+		jsonResponse = httpManager.jsonParser(response);
+		if(jsonResponse.boolean == "true")
+		{
+			loadManager.hideWaiter();
+			$state.go('storeTypes');
+			$scope.signUpModal.hide();
+			$scope.loginModal.hide();
+		}
+		else
+		{
+			loadManager.hideWaiter();
+			ionicToast.show('Error In Form.','middle',false,2500);
+		}
 	};
 
 	$scope.doSignUp = function () {
 		loadManager.showWaiter();
-		$http({method: 'POST',url: urlBase+'/SignUp',data: $.param({ID:'0',userName: $('#username').val() ,lastname: $('#username').val(),password:$('#password').val(),address:$('#address').val(),landmark:$('#landmark').val(),contactnum1:$('#contactnum1').val(),contactnum2:$('#contactnum2').val(),email:$('#email').val(),locationID:$('#location').val()}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
-		function successCallback(response) {
-			var x2js = new X2JS();
-			jsonResponse = x2js.xml_str2json(response.data);
-			if(jsonResponse.boolean == "true")
-			{
-				loadManager.hideWaiter();
-				$state.go('storeTypes');
-				$scope.signUpModal.hide();
-				$scope.loginModal.hide();
-			}
-			else
-			{
-				loadManager.hideWaiter();
-				ionicToast.show('Error In Form.','middle',false,2500);
-			}
-		}
-		, function errorCallback(response) {ionicToast.show('Couldn\'t Connect','middle',false,2500);});
+		httpManager.postRequester('SignUp',{ID:'0',userName: $('#username').val() ,lastname: $('#username').val(),password:$('#password').val(),address:$('#address').val(),landmark:$('#landmark').val(),contactnum1:$('#contactnum1').val(),contactnum2:$('#contactnum2').val(),email:$('#email').val(),locationID:$('#location').val()},$scope.doSignUpSuccessCallback);
 	};
   
 	$scope.login = function() {

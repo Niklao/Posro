@@ -1,6 +1,6 @@
 angular.module('starter.storeTypesCtrl', ['ui.router'])
 
-.controller('StoreTypes', function($scope,$ionicModal,$state,$http,$rootScope,$ionicFilterBar,ionicToast,$ionicLoading,$ionicPopup,httpManager,loadManager) {
+.controller('StoreTypes', function($scope,$ionicModal,$state,$http,$rootScope,$ionicFilterBar,ionicToast,$ionicLoading,$ionicPopup,httpManager,loadManager,ionicMaterialInk) {
   
 	var jsonResponse ;
 	$scope.storeTypes;
@@ -9,6 +9,8 @@ angular.module('starter.storeTypesCtrl', ['ui.router'])
 	$scope.meetAndEvents;
 	$scope.meetAndEventsCategory;
 	$scope.locations;
+
+	ionicMaterialInk.displayEffect();
 	
 	var s0 = new Date();
 	$scope.selectedDates = [s0];
@@ -26,7 +28,7 @@ angular.module('starter.storeTypesCtrl', ['ui.router'])
 		selectedDates : $scope.selectedDates,
 		selectType: 'SINGLE',
 		closeOnSelect: true,
-		callback: function (dates) {  //Mandatory
+		callback: function (dates) {
 		retSelectedBirthDates(dates);
 		}
     };
@@ -39,9 +41,9 @@ angular.module('starter.storeTypesCtrl', ['ui.router'])
 	};
   
 	$scope.timePickerObject24HourBirth = {
-      inputEpochTime: ((new Date()).getHours() * 60 * 60 + (new Date()).getMinutes() * 60),  //Optional
+      inputEpochTime: ((new Date()).getHours() * 60 * 60 + (new Date()).getMinutes() * 60),
       step : 1,
-      format: 24,  //Optional
+      format: 24,
       titleLabel: '24-hour Format',  //Optional
       closeLabel: 'Cancel',  //Optional
       setLabel: 'Select',  //Optional

@@ -1,6 +1,6 @@
 angular.module('starter.productsCtrl', ['ui.router'])
 
-.controller('ProductsCtrl', function($scope,$ionicModal,$http,$rootScope,$ionicFilterBar,Upload,$ionicPopup,ionicToast,$ionicLoading,loadManager) {
+.controller('ProductsCtrl', function($scope,$ionicModal,$state,$http,$rootScope,$ionicFilterBar,Upload,$ionicPopup,ionicToast,$ionicLoading,loadManager) {
 
 	$scope.jsonResponse;
 	$scope.currentProduct;
@@ -185,7 +185,7 @@ angular.module('starter.productsCtrl', ['ui.router'])
 				jsonResponse = x2js.xml_str2json(response.data);
 				$scope.jsonResponse = JSON.parse(jsonResponse.string.__text);
 			}
-			, function errorCallback(response) {alert(response);});
+			, function errorCallback(response) {alert('yo');});
 		}
 		else
 		{
@@ -196,7 +196,7 @@ angular.module('starter.productsCtrl', ['ui.router'])
 				jsonResponse = x2js.xml_str2json(response.data);
 				$scope.jsonResponse = JSON.parse(jsonResponse.string.__text);
 			}
-			, function errorCallback(response) {alert(response);});
+			, function errorCallback(response) {ionicToast.show('Load Failed.','middle',false,2500);});
 		}
 	};
 	
@@ -212,8 +212,6 @@ angular.module('starter.productsCtrl', ['ui.router'])
 			, function errorCallback(response) {loadManager.hideWaiter();});
 	};
 	
-	$scope.searchCategory();
-	
 	$("body").on('keyup', '#searchCategory', $scope.searchCategory );
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////
@@ -227,7 +225,7 @@ angular.module('starter.productsCtrl', ['ui.router'])
 			$rootScope.storeProducts =JSON.parse(jsonResponse.string.__text);
 			console.log($rootScope.storeProducts.Table);
 		}
-		, function errorCallback(response) {ionicToast.show('Load Failed.','middle',false,2500);});
+		, function errorCallback(response) {loadManager.hideWaiter();ionicToast.show('Load Failed.','middle',false,2500);$state.go('storeTypes');});
 		
 		$http({method: 'POST',url: urlBase+'/GetCategory',data: $.param({StoreID: $rootScope.storeId}),headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
 		function successCallback(response) {
@@ -237,7 +235,7 @@ angular.module('starter.productsCtrl', ['ui.router'])
 			$scope.jsonResponse = JSON.parse(jsonResponse.string.__text);
 			loadManager.hideWaiter();
 		}
-		, function errorCallback(response) {ionicToast.show('Load Failed.','middle',false,2500);});
+		, function errorCallback(response) {loadManager.hideWaiter();ionicToast.show('Load Failed.','middle',false,2500);$state.go('storeTypes');});
 	};
   
 	$scope.filterResult = function (){

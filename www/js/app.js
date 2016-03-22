@@ -7,8 +7,8 @@
 
 // var urlBase='http://myposro.somee.com/webservice/MyPosroWebservice.asmx';
 var urlBase='http://myposro1.somee.com/webservice1.asmx';
-
-angular.module('starter', ['ionic','starter.productsCtrl','starter.homeCtrl','starter.storesCtrl','starter.storeTypesCtrl','starter.locationCtrl','starter.buyNSellCtrl','starter.servicesCtrl','jett.ionic.filter.bar','ionic-toast','ngFileUpload','ionic-timepicker', 'ionic-multi-date-picker','neo-loadManager','neo-httpManager','ionic-material'])
+var homeState =false;
+angular.module('starter', ['ionic','starter.productsCtrl','starter.homeCtrl','starter.storesCtrl','starter.storeTypesCtrl','starter.locationCtrl','starter.buyNSellCtrl','starter.servicesCtrl','jett.ionic.filter.bar','ionic-toast','ngFileUpload','ionic-timepicker', 'ionic-multi-date-picker','neo-loadManager','neo-fileManager','neo-httpManager','ionic-material'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {

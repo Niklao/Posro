@@ -9,7 +9,10 @@ angular.module('neo-httpManager', [])
 		},
 		jsonParser: function (response) {
     		var x2js = new X2JS();
-			return x2js.xml_str2json(response.data);
+    		return x2js.xml_str2json(response.data);
 		},
+		jsonCleaner: function (response) {
+			return response.string.__text.replace(/\r?\n|\r/g,'');
+		}
    };
 });

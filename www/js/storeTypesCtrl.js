@@ -289,7 +289,7 @@ angular.module('starter.storeTypesCtrl', ['ui.router'])
 	
 	$scope.goToBuyNSell = function()
 	{
-		$state.go('buynsell.buynsells');	
+		$state.go('buynsell.buynsells');
 	};
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////
@@ -363,7 +363,7 @@ angular.module('starter.storeTypesCtrl', ['ui.router'])
 	$scope.getMeetAndEventsSuccessCallback = function(response)
 	{
 		jsonResponse = httpManager.jsonParser(response);
-		$scope.meetAndEvents = JSON.parse(jsonResponse.string.__text);
+		$scope.meetAndEvents = JSON.parse(httpManager.jsonCleaner(jsonResponse));
 		loadManager.hideWaiter();	
 	}
 
